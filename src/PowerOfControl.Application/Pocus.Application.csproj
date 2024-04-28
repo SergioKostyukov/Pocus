@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Dto\" />
+    <Folder Include="BackgroundServices\" />
+    <Folder Include="MappingProfiles\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PowerOfControl.Core\Pocus.Core.csproj" />
+    <ProjectReference Include="..\PowerOfControl.Infrastructure.Data\Pocus.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
+</Project>
