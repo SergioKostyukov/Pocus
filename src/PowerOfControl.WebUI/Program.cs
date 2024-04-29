@@ -1,27 +1,50 @@
-var builder = WebApplication.CreateBuilder(args);
+using Pocus.Infrastructure.Data;
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+namespace Pocus;
+public class Program
 {
-	app.UseExceptionHandler("/Home/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
+	public static void Main(string[] args)
+	{
+		#region Configure services
+		var builder = WebApplication.CreateBuilder(args);
+
+		builder.Services.AddStorage(builder.Configuration);
+
+		builder.Services.AddHttpContextAccessor();
+
+		builder.Services.AddBogusServices();
+
+		builder.Services.AddControllersWithViews();
+		builder.Services.AddRazorPages();
+		#endregion
+
+		#region Configure pipeline
+		var app = builder.Build();
+
+		// Configure the HTTP request pipeline.
+		if (!app.Environment.IsDevelopment())
+		{
+			app.UseExceptionHandler("/Home/Error");
+			app.UseHsts();
+		}
+
+		app.UseHttpsRedirection();
+		app.UseStaticFiles();
+
+		app.UseRouting();
+
+		app.UseAuthentication();
+		app.UseAuthorization();
+
+		app.MapControllerRoute(
+			name: "default",
+			pattern: "{controller=Home}/{action=Index}/{id?}");
+
+		app.MapRazorPages();
+
+		app.DatabaseEnsureCreated();
+
+		app.Run();
+		#endregion
+	}
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
