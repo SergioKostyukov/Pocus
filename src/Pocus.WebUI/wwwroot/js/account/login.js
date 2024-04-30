@@ -10,18 +10,6 @@ const ERROR_MESSAGES = {
     password: "Please fill in the password",
 };
 
-// Function to update user login data and perform validation
-function updateUserLoginData(fieldId) {
-    userLoginData[fieldId] = document.getElementById(fieldId).value;
-    hideError(fieldId);
-}
-
-// Function to hide errors
-function hideError(fieldId) {
-    const errorElement = document.getElementById(`${fieldId}_error`);
-    errorElement.textContent = "";
-}
-
 // Function for login validation and sending data to the backend
 function login() {
     // Validate input

@@ -1,6 +1,6 @@
 ﻿namespace Pocus.Core.Entities;
 
-public class Task
+public class Plan
 {
 	public int Id { get; set; }
 	public int UserId { get; set; }

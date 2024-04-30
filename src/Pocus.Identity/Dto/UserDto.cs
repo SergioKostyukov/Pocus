@@ -1,4 +1,4 @@
-﻿namespace Pocus.Models;
+﻿namespace Pocus.Identity.Dto;
 
 public class UserDto
 {

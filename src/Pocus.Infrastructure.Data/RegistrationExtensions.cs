@@ -18,8 +18,6 @@ public static class RegistrationExtensions
 	public static IServiceCollection AddBogusServices(this IServiceCollection services)
 	{
 		//services.AddTransient<UserDataGeneration>();
-		//services.AddTransient<BookDataGeneration>();
-		//services.AddTransient<RaffleDataGeneration>();
 
 		return services;
 	}

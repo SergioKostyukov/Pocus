@@ -16,6 +16,7 @@ public class Program
         builder.Services.AddHttpContextAccessor();
 
 		builder.Services.AddBogusServices();
+		builder.Services.AddIdentityServices();
 
 		builder.Services.AddControllersWithViews();
 		builder.Services.AddRazorPages();
@@ -41,7 +42,7 @@ public class Program
 
 		app.MapControllerRoute(
 			name: "default",
-			pattern: "{controller=Home}/{action=MainPage}");
+			pattern: "{controller=Account}/{action=Login}");
 
 		app.MapRazorPages();
 

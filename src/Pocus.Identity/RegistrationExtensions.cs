@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Pocus.Identity.MappingProfiles;
 
 namespace Pocus.Identity;
 
@@ -9,10 +10,8 @@ public static class RegistrationExtensions
 {
     public static IServiceCollection AddJWTTokenServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var bindJwtSettings = new JwtSettings();
-        configuration.Bind("JsonWebTokenKeys", bindJwtSettings);
-
-        services.AddSingleton(bindJwtSettings);
+        var jwtSettings = configuration.GetSection("JsonWebTokenKeys").Get<JwtSettings>();
+        services.Configure<JwtSettings>(configuration.GetSection("JsonWebTokenKeys"));
 
         services.AddAuthentication(options =>
         {
@@ -24,17 +23,27 @@ public static class RegistrationExtensions
             options.SaveToken = true;
             options.TokenValidationParameters = new TokenValidationParameters()
             {
-                ValidateIssuerSigningKey = bindJwtSettings.ValidateIssuerSigningKey,
-                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(bindJwtSettings.IssuerSigningKey)),
-                ValidateIssuer = bindJwtSettings.ValidateIssuer,
-                ValidIssuer = bindJwtSettings.ValidIssuer,
-                ValidateAudience = bindJwtSettings.ValidateAudience,
-                ValidAudience = bindJwtSettings.ValidAudience,
-                RequireExpirationTime = bindJwtSettings.RequireExpirationTime,
-                ValidateLifetime = bindJwtSettings.RequireExpirationTime,
+                ValidateIssuerSigningKey = jwtSettings.ValidateIssuerSigningKey,
+                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtSettings.IssuerSigningKey)),
+                ValidateIssuer = jwtSettings.ValidateIssuer,
+                ValidIssuer = jwtSettings.ValidIssuer,
+                ValidateAudience = jwtSettings.ValidateAudience,
+                ValidAudience = jwtSettings.ValidAudience,
+                RequireExpirationTime = jwtSettings.RequireExpirationTime,
+                ValidateLifetime = jwtSettings.RequireExpirationTime,
                 ClockSkew = TimeSpan.Zero,
             };
-        });
+        })
+        .AddCookie("Cookie");
+
+        return services;
+    }
+
+    public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+    {
+        services.AddAutoMapper(typeof(UserProfile));
+
+        services.AddScoped<IIdentityService, IdentityService>();
 
         return services;
     }

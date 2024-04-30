@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pocus.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Pocus.Infrastructure.Data;
 namespace Pocus.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(PocusDbContext))]
-    partial class PocusDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240430143351_Task renamed to Plan")]
+    partial class TaskrenamedtoPlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
