@@ -1,6 +1,6 @@
 ﻿namespace Pocus.WebUI.Models;
 
-public class Login
+public class LoginModel
 {
 
 }

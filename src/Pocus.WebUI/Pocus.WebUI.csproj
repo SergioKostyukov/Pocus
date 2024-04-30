@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PowerOfControl.Application\Pocus.Application.csproj" />
-    <ProjectReference Include="..\PowerOfControl.Infrastructure.Data\Pocus.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Pocus.Application\Pocus.Application.csproj" />
+    <ProjectReference Include="..\Pocus.Identity\Pocus.Identity.csproj" />
+    <ProjectReference Include="..\Pocus.Infrastructure.Data\Pocus.Infrastructure.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

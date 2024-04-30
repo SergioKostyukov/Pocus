@@ -1,3 +1,4 @@
+using Pocus.Identity;
 using Pocus.Infrastructure.Data;
 
 namespace Pocus;
@@ -10,7 +11,9 @@ public class Program
 
 		builder.Services.AddStorage(builder.Configuration);
 
-		builder.Services.AddHttpContextAccessor();
+        builder.Services.AddJWTTokenServices(builder.Configuration);
+
+        builder.Services.AddHttpContextAccessor();
 
 		builder.Services.AddBogusServices();
 
