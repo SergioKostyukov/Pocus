@@ -1,0 +1,20 @@
+.center-blocks {
+    margin-top: 30px;
+}
+
+.block {
+    width: calc(33.33% - 126px/3);
+    min-width: 300px;
+    max-width: 800px;
+    height: calc(50% - 54px/2);
+    max-height: 700px;
+
+    margin: 0px 20px 40px 20px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.block h2 {
+    margin-top: -30px;
+}

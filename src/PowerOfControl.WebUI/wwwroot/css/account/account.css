@@ -1,0 +1,60 @@
+.center-blocks h1 {
+    margin: 0px;
+    font-size: 36px;
+}
+
+.center-blocks h2 {
+    margin: 20px 0px 10px 0px;
+    font-size: 22px;
+}
+
+input {
+    width: 60%;
+    height: 45px;
+    padding: 0px 15px;
+    margin-bottom: 15px; 
+    border-radius: 20px;
+    border: 1px solid #333;
+}
+
+hr {
+    margin-left: 0;
+    width: 90%;
+}
+
+.update-button {
+    background-color: #333;
+    color: #fff;
+    width: 30%;
+    height: 40px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 18px;
+    border: 1px solid #ccc;
+
+    display: block;
+    margin: 0 17%;
+}
+
+.update-button:hover {
+    background-color: #555;
+    border: 2px solid #555;
+}
+
+.delete-button{
+    width: 120px;
+    height: 40px;
+    background-color: #af1b01;
+    border: 1px solid rgb(150, 0, 0);
+    color: white;
+    border-radius: 17px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10px;
+}
+
+.delete-button:hover {
+    background-color: red;
+    border: 1px solid black;
+}

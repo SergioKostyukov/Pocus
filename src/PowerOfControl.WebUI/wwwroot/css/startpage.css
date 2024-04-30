@@ -1,0 +1,53 @@
+body{
+    user-select: none;
+    margin: 0;
+    padding: 0;
+}
+
+.start-page {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.background-image {
+    width: 50%;
+    height: 60%;
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.buttons-container {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+}
+
+.buttons-container a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.login-button,
+.signup-button {
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    background-color: #777;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover,
+.signup-button:hover {
+    background-color: #444;
+}

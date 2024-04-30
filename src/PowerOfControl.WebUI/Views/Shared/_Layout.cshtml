@@ -3,47 +3,91 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Pocus.WebUI</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Pocus.WebUI.styles.css" asp-append-version="true" />
+    <title>Pocus</title>
+    <link rel="icon" href="~/images/favicon.png" type="image/png">
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />*@
+
+    <link rel="stylesheet" href="~/css/shared/base.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/shared/header.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/shared/navigationPanel.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/shared/block.css" asp-append-version="true">
+
+    <link rel="stylesheet" href="~/css/mainPage.css" asp-append-version="true">
+
+    @await RenderSectionAsync("Style", required: false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Pocus.WebUI</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+        <div class="header-left">
+            <button class="toggle-button" onclick="toggleNavigationPanel()">☰</button>
+            <a href="mainpage.html" class="app-logo-button">
+                <img src="~/images/title.png" alt="App Logo" class="app-logo">
+                <h1>Power Of Control</h1>
+            </a>
+        </div>
+        <nav class="user-account">
+            <button class="profile-button" onclick="toggleUserMenu()">
+                <img src="~/images/avatar.png" alt="Avatar" class="user-avatar">
+                <h2></h2>
+            </button>
+            <div class="user-menu" id="userMenu">
+                <div id="userInfo" class="user-info"></div>
+                <ul id="userOptions"></ul>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Pocus.WebUI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    <main class="flex-container">
+        <aside class="navigation-panel" id="navigationPanel">
+            <div class="top-buttons">
+                <a href="mainpage.html" class="round-button">
+                    <img src="~/images/globe.png" alt="Home">
+                    <span class="button-text">Home</span>
+                </a>
+                <a href="concentration.html" class="round-button">
+                    <img src="~/images/clock.png" alt="Concentration">
+                    <span class="button-text">Concentration</span>
+                </a>
+                <a href="tasks.html" class="round-button">
+                    <img src="~/images/book.png" alt="Tasks">
+                    <span class="button-text">Tasks</span>
+                </a>
+                <a href="notes.html" class="round-button">
+                    <img src="~/images/notes.png" alt="Notes">
+                    <span class="button-text">Notes</span>
+                </a>
+                <a href="statistic.html" class="round-button">
+                    <img src="~/images/statistic.png" alt="Statistic">
+                    <span class="button-text">Statistic</span>
+                </a>
+            </div>
+            <div class="bottom-button">
+                <a href="about.html" class="round-button">
+                    <img src="~/images/about.png" alt="About">
+                    <span class="button-text">About</span>
+                </a>
+                <a href="archive.html" class="round-button">
+                    <img src="~/images/folder.png" alt="Trash/Archive">
+                    <span class="button-text">Archive</span>
+                </a>
+                <a href="settings.html" class="round-button">
+                    <img src="~/images/settings.png" alt="Settings">
+                    <span class="button-text">Settings</span>
+                </a>
+            </div>
+        </aside>
+
+        @RenderBody()
+    </main>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+
+    <script src="~/js/account/cookies.js" asp-append-version="true"></script>
+
+    <script src="~/js/shared/accountBar.js" asp-append-version="true"></script>
+    <script src="~/js/shared/navigationPanel.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Script", required: false)
 </body>
 </html>
