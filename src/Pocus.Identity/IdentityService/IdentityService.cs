@@ -29,13 +29,13 @@ internal class IdentityService(ILogger<IdentityService> logger,
     {
         try
         {
-            request.Tag = request.Tag.ToLower();
+            request.UserName = request.UserName.ToLower();
 
             var storedUser = await _context.Users
-                        .Where(u => u.Tag == request.Tag)
+                        .Where(u => u.UserName == request.UserName)
                         .FirstOrDefaultAsync() ?? throw new Exception("User not found");
 
-            if (BCrypt.Net.BCrypt.Verify(request.Password, storedUser.Password))
+            if (BCrypt.Net.BCrypt.Verify(request.Password, storedUser.PasswordHash))
             {
                 GenerateTokenKey(_mapper.Map<UserDto>(storedUser));
 
@@ -62,13 +62,13 @@ internal class IdentityService(ILogger<IdentityService> logger,
             // Hash the user's password
             request.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             request.Email = request.Email.ToLower();
-            request.Tag = request.Tag.ToLower();
+            request.UserName = request.UserName.ToLower();
 
             await _context.Users.AddAsync(_mapper.Map<User>(request));
             await _context.SaveChangesAsync();
 
             var storedUser = await _context.Users
-                        .Where(u => u.Tag == request.Tag)
+                        .Where(u => u.UserName == request.UserName)
                         .FirstOrDefaultAsync() ?? throw new Exception("User not found");
             GenerateTokenKey(_mapper.Map<UserDto>(storedUser));
 
@@ -89,8 +89,8 @@ internal class IdentityService(ILogger<IdentityService> logger,
         var claims = new List<Claim>
         {
             new (ClaimTypes.Email, user.Email),
-            new ("id", user.Id.ToString()),
-            new ("tag", user.Tag),
+            new (ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new (ClaimTypes.Name, user.UserName),
             new ("notifications", user.Notifications.ToString())
         };
 
@@ -111,7 +111,8 @@ internal class IdentityService(ILogger<IdentityService> logger,
         {
             HttpOnly = true,
             SameSite = SameSiteMode.None,
-            Secure = true
+            Secure = true,
+            IsEssential = true
         });
 
         _logger.LogInformation(token);

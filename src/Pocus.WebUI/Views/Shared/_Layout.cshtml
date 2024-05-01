@@ -37,6 +37,7 @@
                 <ul id="userOptions"></ul>
             </div>
         </nav>
+        <partial name="_LoginPartial" />
     </header>
 
     <main class="flex-container">
@@ -90,6 +91,6 @@
     <script src="~/js/shared/accountBar.js" asp-append-version="true"></script>
     <script src="~/js/shared/navigationPanel.js" asp-append-version="true"></script>
 
-    @await RenderSectionAsync("Script", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

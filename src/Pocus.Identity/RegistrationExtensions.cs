@@ -17,10 +17,11 @@ public static class RegistrationExtensions
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(options =>
         {
-            options.RequireHttpsMetadata = false;
             options.SaveToken = true;
+            options.RequireHttpsMetadata = false;
             options.TokenValidationParameters = new TokenValidationParameters()
             {
                 ValidateIssuerSigningKey = jwtSettings.ValidateIssuerSigningKey,
@@ -34,7 +35,10 @@ public static class RegistrationExtensions
                 ClockSkew = TimeSpan.Zero,
             };
         })
-        .AddCookie("Cookie");
+        .AddCookie("Cookie", options =>
+        {
+            options.LoginPath = "~Views/Identity/Login.cshtml";
+        });
 
         return services;
     }

@@ -99,7 +99,10 @@ document.addEventListener('click', function (event) {
     const userMenu = document.getElementById('userMenu');
     const profileButton = document.querySelector('.profile-button');
 
-    if (event.target !== profileButton && !profileButton.contains(event.target) && event.target !== userMenu && !userMenu.contains(event.target)) {
+    if (event.target !== profileButton &&
+        !profileButton.contains(event.target) &&
+        event.target !== userMenu &&
+        !userMenu.contains(event.target)) {
         userMenu.style.display = 'none';
     }
 });
