@@ -16,6 +16,9 @@
         <form id="download-data" asp-page="DownloadPersonalData" method="post">
             <button class="btn btn-primary" type="submit">Download</button>
         </form>
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("MainPage", "Home", new { area = "" })">
+            <button class="profile-button" id="logout" type="submit">Logout</button>
+        </form>
         <p>
             <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Delete</a>
         </p>

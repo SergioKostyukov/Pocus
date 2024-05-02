@@ -4,6 +4,7 @@ using Pocus.Core.Entities;
 using Pocus.Infrastructure.Data;
 
 namespace Pocus;
+
 public class Program
 {
     public static void Main(string[] args)

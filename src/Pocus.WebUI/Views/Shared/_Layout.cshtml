@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pocus</title>
     <link rel="icon" href="~/images/favicon.png" type="image/png">
-    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />*@
 
     <link rel="stylesheet" href="~/css/shared/base.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/shared/header.css" asp-append-version="true">
@@ -22,7 +21,7 @@
     <header>
         <div class="header-left">
             <button class="toggle-button" onclick="toggleNavigationPanel()">☰</button>
-            <a href="mainpage.html" class="app-logo-button">
+            <a href="@Url.Action("MainPage", "Home")" class="app-logo-button">
                 <img src="~/images/title.png" alt="App Logo" class="app-logo">
                 <h1>Pocus</h1>
             </a>
@@ -75,7 +74,6 @@
     </main>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
 
     <script src="~/js/shared/navigationPanel.js" asp-append-version="true"></script>
 

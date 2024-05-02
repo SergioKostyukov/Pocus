@@ -1,6 +1,10 @@
 ﻿@page
 @model RegisterModel
 
+@{
+    Layout = "~/Areas/Identity/Pages/_IdentityLayout.cshtml";
+}
+
 <div class="block">
     <h2>Register</h2>
     <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
