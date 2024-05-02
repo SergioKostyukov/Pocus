@@ -7,6 +7,6 @@ public class Plan
 	public string Title { get; set; } = string.Empty;
 	public string Text { get; set; } = string.Empty;
 	public DateTime? NotificationTime { get; set; }
-	public bool IsArchive { get; set; } = true;
+	public bool IsArchived { get; set; } = false;
 	public bool IsPinned { get; set; } = false;
 }

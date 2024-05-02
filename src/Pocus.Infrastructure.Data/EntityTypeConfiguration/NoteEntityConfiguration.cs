@@ -19,7 +19,7 @@ internal class NoteEntityConfiguration : IEntityTypeConfiguration<Note>
 		builder.Property(x => x.Text)
 			.IsRequired();
 
-		builder.Property(x => x.IsArchive)
+		builder.Property(x => x.IsArchived)
 			.IsRequired();
 
 		builder.Property(x => x.IsPinned)
