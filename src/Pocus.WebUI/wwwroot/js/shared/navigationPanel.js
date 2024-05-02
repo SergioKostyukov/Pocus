@@ -1,7 +1,7 @@
 let isPanelExpandedByButton = false;
 let isPanelExpandedByCursor = false;
 
-function reserButtonText(){
+function resetButtonText(){
     const roundButtons = document.querySelectorAll('.round-button span');
     roundButtons.forEach((span) => {
         span.style.opacity = '0';
@@ -66,4 +66,4 @@ document.getElementById('navigationPanel').addEventListener('mouseleave', () => 
     }
 });
 
-reserButtonText();
+resetButtonText();

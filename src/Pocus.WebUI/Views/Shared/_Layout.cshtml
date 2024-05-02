@@ -27,16 +27,7 @@
                 <h1>Pocus</h1>
             </a>
         </div>
-        <nav class="user-account">
-            <button class="profile-button" onclick="toggleUserMenu()">
-                <img src="~/images/avatar.png" alt="Avatar" class="user-avatar">
-                <h2></h2>
-            </button>
-            <div class="user-menu" id="userMenu">
-                <div id="userInfo" class="user-info"></div>
-                <ul id="userOptions"></ul>
-            </div>
-        </nav>
+        
         <partial name="_LoginPartial" />
     </header>
 
@@ -86,9 +77,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
 
-    <script src="~/js/account/cookies.js" asp-append-version="true"></script>
-
-    <script src="~/js/shared/accountBar.js" asp-append-version="true"></script>
     <script src="~/js/shared/navigationPanel.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
