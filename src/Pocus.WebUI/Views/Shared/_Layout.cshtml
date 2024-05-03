@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pocus</title>
     <link rel="icon" href="~/images/favicon.png" type="image/png">
+    <title>Pocus</title>
 
     <link rel="stylesheet" href="~/css/shared/base.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/shared/header.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/shared/navigationPanel.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/shared/block.css" asp-append-version="true">
-
-    <link rel="stylesheet" href="~/css/mainPage.css" asp-append-version="true">
 
     @await RenderSectionAsync("Style", required: false)
 </head>
@@ -33,37 +31,37 @@
     <main class="flex-container">
         <aside class="navigation-panel" id="navigationPanel">
             <div class="top-buttons">
-                <a href="mainpage.html" class="round-button">
+                <a href="@Url.Action("MainPage", "Home")" class="round-button">
                     <img src="~/images/globe.png" alt="Home">
                     <span class="button-text">Home</span>
                 </a>
-                <a href="concentration.html" class="round-button">
+                <a href="@Url.Action("Get", "Concentration")" class="round-button">
                     <img src="~/images/clock.png" alt="Concentration">
                     <span class="button-text">Concentration</span>
                 </a>
-                <a href="tasks.html" class="round-button">
+                <a href="@Url.Action("Get", "Task")" class="round-button">
                     <img src="~/images/book.png" alt="Tasks">
                     <span class="button-text">Tasks</span>
                 </a>
-                <a href="notes.html" class="round-button">
+                <a href="@Url.Action("Get", "Note")" class="round-button">
                     <img src="~/images/notes.png" alt="Notes">
                     <span class="button-text">Notes</span>
                 </a>
-                <a href="statistic.html" class="round-button">
+                <a href="@Url.Action("Get", "Statistic")" class="round-button">
                     <img src="~/images/statistic.png" alt="Statistic">
                     <span class="button-text">Statistic</span>
                 </a>
             </div>
             <div class="bottom-button">
-                <a href="about.html" class="round-button">
+                <a href="@Url.Action("About", "Home")" class="round-button">
                     <img src="~/images/about.png" alt="About">
                     <span class="button-text">About</span>
                 </a>
-                <a href="archive.html" class="round-button">
+                <a href="@Url.Action("Get", "Archive")" class="round-button">
                     <img src="~/images/folder.png" alt="Trash/Archive">
                     <span class="button-text">Archive</span>
                 </a>
-                <a href="settings.html" class="round-button">
+                <a href="@Url.Action("Get", "Settings")" class="round-button">
                     <img src="~/images/settings.png" alt="Settings">
                     <span class="button-text">Settings</span>
                 </a>

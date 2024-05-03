@@ -12,18 +12,6 @@ namespace Pocus.WebUI.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         [HttpGet]
-        public IActionResult Index()
-        {
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            //_httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-            //    ?? throw new InvalidOperationException("User not found");
-
-            _logger.LogInformation(userId);
-
-            return View();
-        }
-
-        [HttpGet]
         public IActionResult MainPage()
         {
             var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
@@ -31,6 +19,12 @@ namespace Pocus.WebUI.Controllers
 
             _logger.LogInformation(userId);
             return View("~/Views/Home/MainPage.cshtml");
+        }
+
+        [HttpGet]
+        public IActionResult About()
+        {
+            return View("~/Views/Home/About.cshtml");
         }
     }
 }

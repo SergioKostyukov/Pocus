@@ -1,5 +1,5 @@
 ﻿namespace Pocus.WebUI.Models;
 
-public class NotesModel
+public class ConcentrationModel
 {
 }

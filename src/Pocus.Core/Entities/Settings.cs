@@ -1,9 +1,8 @@
 ﻿namespace Pocus.Core.Entities;
 public class Settings
 {
-	public int Id { get; set; }
-	public int UserId { get; set; }
-	public int WorkTime { get; set; }
+	public string UserId { get; set; } = string.Empty;
+    public int WorkTime { get; set; }
 	public int BreakTime { get; set; }
 	public bool IsNotificationSound { get; set; } = true;
 	public int DayGoal { get; set; }

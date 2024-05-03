@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Pocus.Core.Entities;
 using Pocus.Infrastructure.Data;
+using Pocus.Application;
 
 namespace Pocus;
 
@@ -27,6 +28,7 @@ public class Program
 
         builder.Services.AddHttpContextAccessor();
 
+        builder.Services.AddServices(builder.Configuration);
         builder.Services.AddBogusServices();
 
         builder.Services.AddControllersWithViews();
@@ -53,7 +55,7 @@ public class Program
 
         app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}");
+                pattern: "{controller=Home}/{action=MainPage}");
 
         app.MapRazorPages();
 

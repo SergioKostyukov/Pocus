@@ -12,8 +12,8 @@ using Pocus.Infrastructure.Data;
 namespace Pocus.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(PocusDbContext))]
-    [Migration("20240502151708_initial migration")]
-    partial class initialmigration
+    [Migration("20240503170708_Settings")]
+    partial class Settings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -184,8 +184,9 @@ namespace Pocus.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -217,8 +218,9 @@ namespace Pocus.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -227,11 +229,8 @@ namespace Pocus.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Pocus.Core.Entities.Settings", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("BlockSites")
                         .HasColumnType("bit");
@@ -257,13 +256,10 @@ namespace Pocus.Infrastructure.Data.Migrations
                     b.Property<bool>("ThemeColor")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("WorkTime")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Settings");
                 });

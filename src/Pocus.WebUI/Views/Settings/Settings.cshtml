@@ -1,1 +1,129 @@
-﻿
+﻿@model SettingsModel
+
+@section Style {
+    <link rel="stylesheet" href="~/css/shared/slider.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/settings.css" asp-append-version="true">
+}
+
+<div class="center-blocks">
+    <div class="block" id="sessionSettings">
+        <h1>Session params</h1>
+        <hr>
+
+        <form asp-controller="Settings" asp-action="UpdateSessionSettings" method="post" autocomplete="off" enctype="multipart/form-data">
+            <div class="select-block">
+                <label asp-for="SessionSettings.WorkTime">Work Period</label>
+                <select asp-for="SessionSettings.WorkTime" name="SessionSettings.WorkTime">
+                    <option value="30">30 minutes</option>
+                    <option value="35">35 minutes</option>
+                    <option value="40">40 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="50">50 minutes</option>
+                    <option value="55">55 minutes</option>
+                    <option value="60">60 minutes</option>
+                </select>
+            </div>
+
+            <div class="select-block">
+                <label asp-for="SessionSettings.BreakTime">Break Period</label>
+                <select asp-for="SessionSettings.BreakTime" name="SessionSettings.BreakTime">
+                    <option value="5">5 minutes</option>
+                    <option value="10">10 minutes</option>
+                    <option value="15">15 minutes</option>
+                </select>
+            </div>
+
+            <div class="select-block">
+                <h2>Sound</h2>
+                <label class="switch">
+                    <input type="checkbox" asp-for="SessionSettings.IsNotificationSound" name="SessionSettings.IsNotificationSound">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <input type="hidden" asp-for="UserId" />
+            <button class="update-button" type="submit">Save changes</button>
+        </form>
+    </div>
+
+    <div class="block" id="goalSettings">
+        <form asp-controller="Settings" asp-action="UpdateGoalSettings" method="post" autocomplete="off" enctype="multipart/form-data">
+            <h1>Day goal params</h1>
+            <hr>
+
+            <div class="select-block">
+                <label asp-for="GoalSettings.DayGoal">Day Goal</label>
+                <select asp-for="GoalSettings.DayGoal" name="GoalSettings.DayGoal">
+                    <option value="30">30 minutes</option>
+                    <option value="60">1 hour</option>
+                    <option value="90">1 hour 30 minutes</option>
+                    <option value="120">2 hour</option>
+                    <option value="150">2 hour 30 minutes</option>
+                    <option value="180">3 hour</option>
+                    <option value="210">3 hour 60 minutes</option>
+                    <option value="240">4 hour</option>
+                    <option value="300">5 hour</option>
+                    <option value="360">6 hour</option>
+                    <option value="420">7 hour</option>
+                    <option value="480">8 hour</option>
+                </select>
+            </div>
+
+            <div class="select-block">
+                <label asp-for="GoalSettings.ResetTime">Reset Time</label>
+                <select asp-for="GoalSettings.ResetTime" name="GoalSettings.ResetTime">
+                    <option value="00:00:00">12 pm</option>
+                    <option value="01:00:00">1 am</option>
+                    <option value="02:00:00">2 am</option>
+                    <option value="03:00:00">3 am</option>
+                    <option value="04:00:00">4 am</option>
+                </select>
+            </div>
+
+            <div class="select-block">
+                <h2>Weekends</h2>
+                <label class="switch">
+                    <input type="checkbox" asp-for="GoalSettings.IgnoreWeekend" name="GoalSettings.IgnoreWeekend">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <input type="hidden" asp-for="UserId" />
+            <button class="update-button" type="submit">Save changes</button>
+        </form>
+    </div>
+
+    <div class="block" id="otherSettings">
+        <form asp-controller="Settings" asp-action="UpdateOtherSettings" method="post" autocomplete="off" enctype="multipart/form-data">
+            <h1>Other</h1>
+            <hr>
+
+            <div class="select-block">
+                <h2>Theme color</h2>
+                <label class="switch">
+                    <input type="checkbox" asp-for="OtherSettings.ThemeColor" name="OtherSettings.ThemeColor">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div class="select-block">
+                <h2>Ignore habits</h2>
+                <label class="switch">
+                    <input type="checkbox" asp-for="OtherSettings.IgnoreHabits" name="OtherSettings.IgnoreHabits">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div class="select-block">
+                <h2>Block other sites</h2>
+                <label class="switch">
+                    <input type="checkbox" asp-for="OtherSettings.BlockSites" name="OtherSettings.BlockSites">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <input type="hidden" asp-for="UserId" />
+            <button class="update-button" type="submit">Save changes</button>
+        </form>
+    </div>
+</div>

@@ -16,12 +16,25 @@ internal class SettingsService(ILogger<SettingsService> logger,
     private readonly PocusDbContext _dbContext = dbContext;
     private readonly IMapper _mapper = mapper;
 
-    public async Task SetDefault(int userId)
+    public async Task SetDefault(string userId)
     {
         try
         {
             await _dbContext.Settings
-                .AddAsync(new Settings { UserId = userId });
+                .AddAsync(new Settings {
+                    UserId = userId,
+                    WorkTime = 30,
+                    BreakTime = 10,
+                    IsNotificationSound = true,
+                    DayGoal = 3,
+                    ResetTime = TimeSpan.Zero,
+                    IgnoreWeekend = false,
+                    ThemeColor = false,
+                    IgnoreHabits = false,
+                    BlockSites = false
+                });
+
+            await _dbContext.SaveChangesAsync();
 
             _logger.LogInformation($"Default settings are set");
         }
@@ -31,18 +44,18 @@ internal class SettingsService(ILogger<SettingsService> logger,
             throw;
         }
     }
-    public async Task<SettingsDto> GetByUserId(int userId)
+    public async Task<SettingsDto> GetByUserId(string userId)
     {
-        var settings = await _dbContext.Settings.Where(x => x.UserId == userId).FirstAsync();
+        var settings = await _dbContext.Settings.FirstOrDefaultAsync(x => x.UserId == userId);
 
         return _mapper.Map<SettingsDto>(settings);
     }
-    public async Task UpdateSessionParams(SessionSettingsDto request)
+    public async Task UpdateSessionParams(string userId, SessionSettingsDto request)
     {
         try
         {
             var settings = await _dbContext.Settings
-              .Where(x => x.UserId == request.UserId)
+              .Where(x => x.UserId == userId)
               .FirstAsync();
 
             settings.WorkTime = request.WorkTime;
@@ -53,20 +66,20 @@ internal class SettingsService(ILogger<SettingsService> logger,
 
             await _dbContext.SaveChangesAsync();
 
-            _logger.LogInformation($"Other settings updated successful");
+            _logger.LogInformation($"Session settings updated successful");
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Update other settings error: {ex.Message}");
+            _logger.LogError($"Update Session settings error: {ex.Message}");
             throw;
         }
     }
-    public async Task UpdateGoalParams(GoalSettingsDto request)
+    public async Task UpdateGoalParams(string userId, GoalSettingsDto request)
     {
         try
         {
             var settings = await _dbContext.Settings
-               .Where(x => x.UserId == request.UserId)
+               .Where(x => x.UserId == userId)
                .FirstAsync();
 
             settings.DayGoal = request.DayGoal;
@@ -77,20 +90,20 @@ internal class SettingsService(ILogger<SettingsService> logger,
 
             await _dbContext.SaveChangesAsync();
 
-            _logger.LogInformation("Session settings updated successful");
+            _logger.LogInformation("Goal settings updated successful");
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Update session settings error: {ex.Message}");
+            _logger.LogError($"Update Goal settings error: {ex.Message}");
             throw;
         }
     }
-    public async Task UpdateOtherParams(OtherSettingsDto request)
+    public async Task UpdateOtherParams(string userId, OtherSettingsDto request)
     {
         try
         {
             var settings = await _dbContext.Settings
-              .Where(x => x.UserId == request.UserId)
+              .Where(x => x.UserId == userId)
               .FirstAsync();
 
             settings.ThemeColor = request.ThemeColor;
@@ -101,11 +114,11 @@ internal class SettingsService(ILogger<SettingsService> logger,
 
             await _dbContext.SaveChangesAsync();
 
-            _logger.LogInformation($"Goal settings updated successful");
+            _logger.LogInformation($"Other settings updated successful");
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Update goal settings error: {ex.Message}");
+            _logger.LogError($"Update Other settings error: {ex.Message}");
             throw;
         }
     }

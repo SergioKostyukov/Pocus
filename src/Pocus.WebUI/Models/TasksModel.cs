@@ -1,6 +1,5 @@
-﻿namespace Pocus.WebUI.Models
+﻿namespace Pocus.WebUI.Models;
+
+public class TasksModel
 {
-    public class TasksModel
-    {
-    }
 }

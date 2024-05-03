@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Pocus.Core.Entities;
 using System.ComponentModel.DataAnnotations;
+using Pocus.Application.Interfaces;
 
 namespace Pocus.WebUI.Areas.Identity.Pages.Account
 {
@@ -18,18 +19,21 @@ namespace Pocus.WebUI.Areas.Identity.Pages.Account
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly ISettingsService _settingsService;
 
         public RegisterModel(
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
-            ILogger<RegisterModel> logger)
+            ILogger<RegisterModel> logger,
+            ISettingsService settingsService)
         {
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            _settingsService = settingsService;
         }
 
         /// <summary>
@@ -110,6 +114,8 @@ namespace Pocus.WebUI.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    await _settingsService.SetDefault(user.Id);
+
                     _logger.LogInformation("User created a new account with password.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);

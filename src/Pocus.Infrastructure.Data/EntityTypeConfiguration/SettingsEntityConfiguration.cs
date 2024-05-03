@@ -8,12 +8,9 @@ internal class SettingsEntityConfiguration : IEntityTypeConfiguration<Settings>
 {
 	public void Configure(EntityTypeBuilder<Settings> builder)
 	{
-		builder.HasKey(x => x.Id);
+		builder.HasKey(x => x.UserId);
 
-		builder.Property(x => x.UserId)
-			.IsRequired();
-
-		builder.Property(x => x.WorkTime)
+        builder.Property(x => x.WorkTime)
 			.IsRequired();
 
 		builder.Property(x => x.BreakTime)

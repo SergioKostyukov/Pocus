@@ -16,7 +16,7 @@ internal class PlanService(ILogger<PlanService> logger,
     private readonly PocusDbContext _dbContext = dbContext;
     private readonly IMapper _mapper = mapper;
 
-    public async Task CreateDefault(int userId)
+    public async Task CreateDefault(string userId)
     {
         await _dbContext.Plans.AddAsync(new Plan
         {
@@ -80,7 +80,7 @@ internal class PlanService(ILogger<PlanService> logger,
             throw;
         }
     }
-    public async Task<PlanDto?> GetHabits(int userId)
+    public async Task<PlanDto?> GetHabits(string userId)
     {
         var userHabits = await _dbContext.Plans
             .Where(x => x.UserId == userId && x.Title == "Habits")
@@ -96,7 +96,7 @@ internal class PlanService(ILogger<PlanService> logger,
 
         return _mapper.Map<PlanViewDto>(plan);
     }
-    public async Task<List<PlanDto>?> GetArchived(int userId)
+    public async Task<List<PlanDto>?> GetArchived(string userId)
     {
         var userPlans = await _dbContext.Plans
             .Where(x => x.UserId == userId &&
@@ -106,7 +106,7 @@ internal class PlanService(ILogger<PlanService> logger,
 
         return _mapper.Map<List<PlanDto>>(userPlans);
     }
-    public async Task<List<PlanDto>?> GetNotArchived(int userId)
+    public async Task<List<PlanDto>?> GetNotArchived(string userId)
     {
         var userPlans = await _dbContext.Plans
             .Where(x => x.UserId == userId &&
@@ -116,7 +116,7 @@ internal class PlanService(ILogger<PlanService> logger,
 
         return _mapper.Map<List<PlanDto>>(userPlans);
     }
-    public async Task<List<ObjectTitleDto>?> GetTitlesOfNotArchived(int userId)
+    public async Task<List<ObjectTitleDto>?> GetTitlesOfNotArchived(string userId)
     {
         var userPlans = await _dbContext.Plans
             .Where(x => x.UserId == userId &&

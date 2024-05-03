@@ -1,1 +1,25 @@
-﻿
+﻿@section Style {
+    <link rel="stylesheet" href="~/css/tasks/tasks.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/tasks/buttons.css" asp-append-version="true">
+
+    <link rel="stylesheet" href="css/archive.css" asp-append-version="true">
+}
+
+<div class="center-blocks">
+    <div class="half-page" id="tasksArchive">
+        <h1>
+            Archived Tasks
+        </h1>
+    </div>
+
+    <div class="half-page" id="notesArchive">
+        <h1>
+            Archived Notes
+        </h1>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/archive/archiveRequests.js" asp-append-version="true"></script>
+    <script src="~/js/archive/archive.js" asp-append-version="true"></script>
+}
