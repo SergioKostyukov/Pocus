@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //--------------------------------NODE UPDATE MODE--------------------------------
 
-    const modal_update = document.getElementById("updateNote");
+    const modalUpdate = document.getElementById("updateNote");
     const updateNoteBlock = document.getElementById('updateNoteBlock');
 
     document.querySelector('.tasks-panel').addEventListener('click', function (event) {
@@ -63,13 +63,13 @@ document.addEventListener("DOMContentLoaded", function () {
             fillUpdateModal(updateNoteBlock, noteBlock);
 
             // Activate the modal window
-            modal_update.classList.add('active');
+            modalUpdate.classList.add('active');
         }
     });
 
-    modal_update.addEventListener("click", function (event) {
-        if (event.target === modal_update) {
-            modal_update.classList.remove("active");
+    modalUpdate.addEventListener("click", function (event) {
+        if (event.target === modalUpdate) {
+            modalUpdate.classList.remove("active");
         }
     });
 });

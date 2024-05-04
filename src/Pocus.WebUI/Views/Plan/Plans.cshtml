@@ -13,7 +13,7 @@
 
 <div class="center-blocks" id="centerBlocks">
     <div class="add-task-panel">
-        <button class="add-task-button">New task set</button>
+        <button class="add-task-button">New plan set</button>
     </div>
 
     <div class="tasks-panel">
@@ -30,11 +30,11 @@
         }
     </div>
 
-    <div class="modal" id="newTask">
-        <div class="modal-block task-block" id="newTaskBlock">
-            <h3 contenteditable="true" id="taskTitle">Task name</h3>
+    <div class="modal" id="newPlan">
+        <div class="modal-block task-block" id="newPlanBlock">
+            <h3 contenteditable="true" id="taskTitle">Plan name</h3>
             <button class="action-button pin-button" onclick="togglePin('pinButton')" id="pinButton">
-                <img src="images/pin.png" alt="pin">
+                <img src="~/images/pin.png" alt="pin">
             </button>
             <hr>
             <div class="text-container">
@@ -48,9 +48,9 @@
                 </div>
                 <button class="add-content-button">Add line</button>
             </div>
-            <button class="action-button first-button" onclick="notificationTask('newTaskBlock')"
+            <button class="action-button first-button" onclick="notificationTask('newPlanBlock')"
                     id="notificationButton" title="Notification">
-                <img src="images/notification.png" alt="notification">
+                <img src="~/images/notification.png" alt="notification">
             </button>
             <button class="save-task-button">Save Changes</button>
         </div>
@@ -70,7 +70,7 @@
         taskBlock.Append($"<h3>{plan.Title}</h3>");
         taskBlock.Append("<hr>");
         taskBlock.Append($"<button class='action-button pin-button {(plan.IsPinned ? "pinned" : "")}' id='pin{plan.Id}' onclick='saveTogglePin(\"pin{plan.Id}\")'>");
-        taskBlock.Append("<img src='images/pin.png' alt='pin'>");
+        taskBlock.Append("<img src='/images/pin.png' alt='pin'>");
         taskBlock.Append("</button>");
         if (plan.Text is not null)
         {
@@ -86,20 +86,14 @@
         var textContainer = new System.Text.StringBuilder();
         textContainer.Append("<div class='text-container'>");
 
-        var objectContentArray = JsonConvert.DeserializeObject<List<PlanTextHelper>>(text);
+        var objectContentArray = JsonConvert.DeserializeObject<List<PlanText>>(text);
 
         foreach (var objectContent in objectContentArray)
         {
             var doneToggleElement = new System.Text.StringBuilder();
             doneToggleElement.Append("<div class='done-toggle'>");
-
-            var checkbox = $"<input type='checkbox' id='breakToggle' {(objectContent.IsDone ? "checked" : "")} disabled>";
-            var paragraph = $"<p contenteditable='false' {(objectContent.IsDone ? "class='line-through'" : "")}>{objectContent.Text}</p>";
-            var deleteButton = "<button class='delete-toggle-button'>U+00d7</button>";
-
-            doneToggleElement.Append(checkbox);
-            doneToggleElement.Append(paragraph);
-            doneToggleElement.Append(deleteButton);
+            doneToggleElement.Append($"<input type='checkbox' id='breakToggle' {(objectContent.IsDone ? "checked" : "")} disabled>");
+            doneToggleElement.Append($"<p contenteditable='false' {(objectContent.IsDone ? "class='line-through'" : "")}>{objectContent.Text}</p>");
             doneToggleElement.Append("</div>");
 
             textContainer.Append(doneToggleElement);

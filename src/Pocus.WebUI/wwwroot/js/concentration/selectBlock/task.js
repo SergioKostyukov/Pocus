@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     //--------------------------------TASK VIEW MODE--------------------------------
 
-    const modal_update = document.getElementById("viewTask");
+    const modalUpdate = document.getElementById("viewTask");
     const viewTaskBlock = document.getElementById('viewTaskBlock');
 
     document.querySelector('.task-sets').addEventListener('click', function (event) {
@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (taskBlock) {
             ShowModal(taskBlock);
 
-            modal_update.classList.add('active');
+            modalUpdate.classList.add('active');
         }
     });
 
-    modal_update.addEventListener("click", function (event) {
-        if (event.target === modal_update) {
-            modal_update.classList.remove("active");
+    modalUpdate.addEventListener("click", function (event) {
+        if (event.target === modalUpdate) {
+            modalUpdate.classList.remove("active");
             viewTaskBlock.innerHTML = '';
         }
     });

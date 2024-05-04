@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pocus.Application.Dto;
 using Pocus.Application.Interfaces;
-using Pocus.Core.Entities;
 using Pocus.WebUI.Models;
-using System.Numerics;
 using System.Security.Claims;
 
 namespace Pocus.WebUI.Controllers
@@ -31,7 +29,7 @@ namespace Pocus.WebUI.Controllers
             var plans = new List<PlanDto>();
             if (!settings.IgnoreHabits)
             {
-                //plans.Add(await _planService.GetHabits(userId));
+                plans.Add(await _planService.GetHabits(userId));
             }
             plans.AddRange(await _planService.GetNotArchived(userId));
 
@@ -58,23 +56,6 @@ namespace Pocus.WebUI.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetNotArchivedPlans()
-        {
-            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                ?? throw new InvalidOperationException("User not found");
-
-            List<PlanDto> tasks = await _planService.GetNotArchived(userId);
-            if (tasks != null)
-            {
-                return Ok(new { message = "Plan data get successful", tasksList = tasks });
-            }
-            else
-            {
-                return Ok(new { message = "There are no Plans" });
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddPlan([FromBody] PlanAddDto plan)
         {
@@ -94,22 +75,6 @@ namespace Pocus.WebUI.Controllers
             }
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> UpdatePlan([FromBody] PlanUpdateDto request)
-        {
-            try
-            {
-                // check if this plan is 'user habits'
-                await _planService.Update(request);
-
-                return Ok(new { message = "Plan update successfully" });
-            }
-            catch
-            {
-                return BadRequest(new { message = "Plan update failed" });
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> CopyPlan([FromBody] PlanRequest request)
         {
@@ -122,6 +87,21 @@ namespace Pocus.WebUI.Controllers
             catch
             {
                 return BadRequest(new { message = "Plan copy failed" });
+            }
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdatePlan([FromBody] PlanUpdateDto request)
+        {
+            try
+            {
+                await _planService.Update(request);
+
+                return Ok(new { message = "Plan update successfully" });
+            }
+            catch
+            {
+                return BadRequest(new { message = "Plan update failed" });
             }
         }
 
@@ -158,7 +138,6 @@ namespace Pocus.WebUI.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeletePlan([FromBody] PlanRequest request)
         {
-            _logger.LogWarning("Plan id: " + request);
             try
             {
                 await _planService.Delete(request.Id);

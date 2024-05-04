@@ -1,4 +1,3 @@
-// Generate a unique identifier value
 const generateUniqueId = () => 'toggle_' + Math.random().toString(36).substring(2, 11);
 
 // Toggle pin activation/deactivation
@@ -42,10 +41,10 @@ function fillUpdateModal(updateObjectBlock, objectBlock) {
     // Add the object title
     // Get data about the object from the selected block
     const objTitle = document.createElement('h3');
-    const title = objectBlock.querySelector("h3").textContent;
+    const title = objectBlock.querySelector('h3').textContent;
     objTitle.textContent = title;
-    const obj_id = parseInt(objectBlock.id.replace('block', ''), 10);
-    objTitle.id = obj_id;
+    const objectId = parseInt(objectBlock.id.replace('block', ''), 10);
+    objTitle.id = objectId;
     updateObjectBlock.appendChild(objTitle);
     
     if(title != "Habits"){
@@ -63,9 +62,9 @@ function fillUpdateModal(updateObjectBlock, objectBlock) {
         pinButton.classList.add('pinned');
     }
     const pinImage = document.createElement('img');
-    pinImage.src = 'images/pin.png';
+    pinImage.src = '/images/pin.png';
     pinImage.alt = 'pin';
-    pinButton.id = 'updatePin' + obj_id;
+    pinButton.id = 'updatePin' + objectId;
     pinButton.setAttribute('onclick', `togglePin('${pinButton.id}')`);
     pinButton.appendChild(pinImage);
     updateObjectBlock.appendChild(pinButton);
@@ -101,7 +100,7 @@ function addCopyButton(updateObjectBlock, command) {
     copyButton.classList.add('action-button', 'first-button');
     copyButton.setAttribute('title', 'Copy');
     const copyImage = document.createElement('img');
-    copyImage.src = 'images/copy.png';
+    copyImage.src = '/images/copy.png';
     copyImage.alt = 'copy';
     copyButton.setAttribute('onclick', command);
     copyButton.appendChild(copyImage);
@@ -114,7 +113,7 @@ function addArchiveButton(updateObjectBlock, command) {
     archiveButton.classList.add('action-button', 'second-button');
     archiveButton.setAttribute('title', 'Archive');
     const archiveImage = document.createElement('img');
-    archiveImage.src = 'images/folder.png';
+    archiveImage.src = '/images/folder.png';
     archiveImage.alt = 'archive';
     archiveButton.setAttribute('onclick', command);
     archiveButton.appendChild(archiveImage);
@@ -127,7 +126,7 @@ function addDeleteButton(updateObjectBlock, command) {
     deleteButton.classList.add('action-button', 'third-button');
     deleteButton.setAttribute('title', 'Delete');
     const deleteImage = document.createElement('img');
-    deleteImage.src = 'images/delete.png';
+    deleteImage.src = '/images/delete.png';
     deleteImage.alt = 'delete';
     deleteButton.setAttribute('onclick', command);
     deleteButton.appendChild(deleteImage);
@@ -140,7 +139,7 @@ function addNotificationButton(updateObjectBlock, command, position="fourth") {
     notificationButton.setAttribute('title', 'Notification');
     notificationButton.classList.add('action-button', `${position}-button`);
     const notificationImage = document.createElement('img');
-    notificationImage.src = 'images/notification.png';
+    notificationImage.src = '/images/notification.png';
     notificationImage.alt = 'notification';
     notificationButton.setAttribute('onclick', command);
     notificationButton.appendChild(notificationImage);
@@ -153,7 +152,7 @@ function addResetCheckboxButton(updateObjectBlock, command) {
     resetButton.setAttribute('title', 'Reset');
     resetButton.classList.add('action-button', 'second-button');
     const resetImage = document.createElement('img');
-    resetImage.src = 'images/reset.png';
+    resetImage.src = '/images/reset.png';
     resetImage.alt = 'reset';
     resetButton.setAttribute('onclick', command);
     resetButton.appendChild(resetImage);

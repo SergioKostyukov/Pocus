@@ -20,13 +20,15 @@ namespace Pocus.WebUI.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly ISettingsService _settingsService;
+        private readonly IPlanService _planService;
 
         public RegisterModel(
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            ISettingsService settingsService)
+            ISettingsService settingsService,
+            IPlanService planService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -34,6 +36,7 @@ namespace Pocus.WebUI.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _settingsService = settingsService;
+            _planService = planService;
         }
 
         /// <summary>
@@ -115,6 +118,7 @@ namespace Pocus.WebUI.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     await _settingsService.SetDefault(user.Id);
+                    await _planService.CreateDefault(user.Id);
 
                     _logger.LogInformation("User created a new account with password.");
 

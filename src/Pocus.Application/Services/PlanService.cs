@@ -129,6 +129,8 @@ internal class PlanService(ILogger<PlanService> logger,
     {
         try
         {
+            // check if this plan is 'user habits'
+
             var plan = await _dbContext.Plans
                 .Where(x => x.Id == request.Id)
                 .FirstAsync();

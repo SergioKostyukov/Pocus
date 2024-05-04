@@ -1,6 +1,5 @@
-// Creating a new text element
-function addNewContent(modal_id) {
-    const modal = document.getElementById(modal_id);
+function addNewContent(modalId) {
+    const modal = document.getElementById(modalId);
     const newContentElement = document.createElement('div');
     newContentElement.classList.add('done-toggle');
     const uniqueId = generateUniqueId();
@@ -53,7 +52,6 @@ function addNewContentAfter(activeElement) {
     newParagraph.focus();
 }
 
-// Deleting a text element
 function deleteToggle(toggleId) {
     const toggleToDelete = document.getElementById(toggleId);
     if (toggleToDelete) {
@@ -62,8 +60,8 @@ function deleteToggle(toggleId) {
 }
 
 // Function to reset the template when exiting creation mode
-function resetTaskBlock(modal_id) {
-    const modal = document.getElementById(modal_id);
+function resetPlanBlock(modalId) {
+    const modal = document.getElementById(modalId);
 
     // Reset the title value
     const taskTitle = modal.querySelector('#taskTitle');
@@ -92,13 +90,13 @@ function resetTaskBlock(modal_id) {
 
 document.addEventListener("DOMContentLoaded", function () {
     //--------------------------------NEW TASK MODE--------------------------------
-    const modal = document.getElementById("newTask");
-    const addTaskButton = document.querySelector(".add-task-button");
+    const modal = document.getElementById("newPlan");
+    const addPlanButton = document.querySelector(".add-task-button");
     const addContentButton = modal.querySelector('.add-content-button');
     const saveTaskButton = modal.querySelector(".save-task-button");
 
     // Expand the template for a new task when the corresponding button is clicked
-    addTaskButton.addEventListener("click", function () {
+    addPlanButton.addEventListener("click", function () {
         modal.classList.add("active");
     });
 
@@ -106,21 +104,21 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("click", function (event) {
         if (event.target === modal) {
             modal.classList.remove("active");
-            resetTaskBlock("newTask");
+            resetPlanBlock("newPlan");
         }
     });
 
     // Add a new content row to the task
     addContentButton.addEventListener('click', function () {
-        addNewContent("newTask");
+        addNewContent("newPlan");
     });
 
     // Save the object to the DB and the main menu
     saveTaskButton.addEventListener("click", function () {
-        if (addTask("newTask")) {
+        if (addPlan("newPlan")) {
             // Close the modal window
             modal.classList.remove("active");
-            resetTaskBlock("newTask");
+            resetPlanBlock("newPlan");
         }
     });
 
@@ -140,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //--------------------------------TASK UPDATE MODE--------------------------------
 
-    const modal_update = document.getElementById("updateTask");
+    const modalUpdate = document.getElementById("updateTask");
     const updateTaskBlock = document.getElementById('updateTaskBlock');
 
     document.querySelector('.tasks-panel').addEventListener('click', function (event) {
@@ -149,24 +147,24 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const taskBlock = event.target.closest('.task-block');
-        if (taskBlock) {
+        const planBlock = event.target.closest('.task-block');
+        if (planBlock) {
             // Pass data to the modal window
-            fillUpdateModal(updateTaskBlock, taskBlock);
+            fillUpdateModal(updateTaskBlock, planBlock);
 
             // Activate the modal window
-            modal_update.classList.add('active');
+            modalUpdate.classList.add('active');
         }
     });
 
-    modal_update.addEventListener("click", function (event) {
-        if (event.target === modal_update) {
-            modal_update.classList.remove("active");
+    modalUpdate.addEventListener("click", function (event) {
+        if (event.target === modalUpdate) {
+            modalUpdate.classList.remove("active");
         }
     });
 
     // Event handler for the Enter key in <p> blocks
-    modal_update.addEventListener('keydown', function (event) {
+    modalUpdate.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             const activeElement = document.activeElement;
 
@@ -180,7 +178,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Function to fill the update task window
 function fillUpdateTextContainer(updateTaskBlock, objectBlock) {
     const contents = objectBlock.querySelectorAll(".done-toggle");
 
@@ -240,14 +237,11 @@ function fillUpdateTextContainer(updateTaskBlock, objectBlock) {
     updateTaskBlock.appendChild(textContainer);
 }
 
-// Function to reset Checkbox value
 function resetCheckboxValues(blockName){
     const taskBlock = document.getElementById(blockName);
 
-    // Get the content of "done-toggle" elements
     const doneToggleElements = taskBlock.querySelectorAll(".done-toggle");
 
-    // Iterate over "done-toggle" elements and reset checkbox
     doneToggleElements.forEach(doneToggleElement => {
         doneToggleElement.querySelector("#breakToggle").checked = false;
         doneToggleElement.querySelector("p").classList.remove("line-through");

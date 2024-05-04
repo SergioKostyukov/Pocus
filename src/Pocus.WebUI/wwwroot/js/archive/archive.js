@@ -13,7 +13,7 @@ function fillObject(object, type) {
     const archiveButton = document.createElement('button');
     archiveButton.classList.add('action-button', 'archive-button');
     const archiveImage = document.createElement('img');
-    archiveImage.src = 'images/folder.png';
+    archiveImage.src = '~/images/folder.png';
     archiveImage.alt = 'archive';
     archiveButton.setAttribute('onclick', `unArchive${type}(${object.id})`);
     archiveButton.setAttribute('title', 'Unarchive');
@@ -24,7 +24,7 @@ function fillObject(object, type) {
     const deleteButton = document.createElement('button');
     deleteButton.classList.add('action-button', 'delete-button');
     const deleteImage = document.createElement('img');
-    deleteImage.src = 'images/delete.png';
+    deleteImage.src = '~/images/delete.png';
     deleteImage.alt = 'delete';
     deleteButton.setAttribute('onclick', `delete${type}(${object.id})`);
     deleteButton.appendChild(deleteImage);

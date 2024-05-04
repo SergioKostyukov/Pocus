@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     //-------------------------------- NOTE UPDATE MODE --------------------------------
 
-    const modal_update = document.getElementById("viewNote");
+    const modalUpdate = document.getElementById("viewNote");
     const viewNoteBlock = document.getElementById('viewNoteBlock');
 
     document.querySelector('.note-sets').addEventListener('click', function (event) {
@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (noteBlock) {
             ShowModal(noteBlock);
 
-            modal_update.classList.add('active');
+            modalUpdate.classList.add('active');
         }
     });
 
-    modal_update.addEventListener("click", function (event) {
-        if (event.target === modal_update) {
-            modal_update.classList.remove("active");
+    modalUpdate.addEventListener("click", function (event) {
+        if (event.target === modalUpdate) {
+            modalUpdate.classList.remove("active");
             viewNoteBlock.innerHTML = '';
         }
     });
