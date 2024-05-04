@@ -92,7 +92,6 @@ function resetTaskBlock(modal_id) {
 
 document.addEventListener("DOMContentLoaded", function () {
     //--------------------------------NEW TASK MODE--------------------------------
-
     const modal = document.getElementById("newTask");
     const addTaskButton = document.querySelector(".add-task-button");
     const addContentButton = modal.querySelector('.add-content-button');
@@ -241,53 +240,6 @@ function fillUpdateTextContainer(updateTaskBlock, objectBlock) {
     updateTaskBlock.appendChild(textContainer);
 }
 
-// Function to fill the task content on the page
-function fillObjectsTextContainer(objectBlock, object) {
-    // Add a container for the task text
-    const textContainer = document.createElement('div');
-    textContainer.classList.add('text-container');
-
-    // Check if there is task text
-    if (object.text) {
-        // Parse the text as JSON
-        const objectContentArray = JSON.parse(object.text);
-
-        // Iterate through the array elements and create corresponding HTML elements
-        objectContentArray.forEach(objectContent => {
-            const doneToggleElement = document.createElement('div');
-            doneToggleElement.classList.add('done-toggle');
-
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.id = 'breakToggle';
-            checkbox.checked = objectContent.isDone;
-            checkbox.disabled = true;
-
-            const paragraph = document.createElement('p');
-            paragraph.contentEditable = false;
-            if (checkbox.checked) {
-                paragraph.classList.add("line-through");
-            }
-            paragraph.textContent = objectContent.text;
-
-            const deleteButton = document.createElement('button');
-            deleteButton.classList.add('delete-toggle-button');
-            deleteButton.textContent = 'U+00d7';
-            deleteButton.style.visibility = 'hidden';
-
-            // Add the created elements to doneToggleElement
-            doneToggleElement.appendChild(checkbox);
-            doneToggleElement.appendChild(paragraph);
-            doneToggleElement.appendChild(deleteButton);
-
-            // Add doneToggleElement to textContainer
-            textContainer.appendChild(doneToggleElement);
-        });
-    }
-
-    objectBlock.appendChild(textContainer);
-}
-
 // Function to reset Checkbox value
 function resetCheckboxValues(blockName){
     const taskBlock = document.getElementById(blockName);
@@ -301,14 +253,3 @@ function resetCheckboxValues(blockName){
         doneToggleElement.querySelector("p").classList.remove("line-through");
     });
 }
-
-async function findHabbits() {
-    const habits = await getHabitsData();
-
-    if (habits == null) {
-        console.log("No habits available");
-    }
-    return habits;
-}
-
-getUserData();

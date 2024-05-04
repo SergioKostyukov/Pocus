@@ -1,210 +1,160 @@
+function GetPlanData(blockName) {
+    const planBlock = document.getElementById(blockName);
+    const planTitle = planBlock.querySelector("#planTitle").textContent;
+
+    const pinButton = planBlock.querySelector(".pin-button");
+    var isPinned = pinButton.classList.contains("pinned");
+
+    // Get the content of "done-toggle" elements
+    const doneToggleElements = planBlock.querySelectorAll(".done-toggle");
+
+    // Create an array to store text and status
+    const planContentArray = [];
+
+    // Iterate over "done-toggle" elements and gather text and status
+    doneToggleElements.forEach(doneToggleElement => {
+        const text = doneToggleElement.querySelector("p").textContent;
+        const isDone = doneToggleElement.querySelector("#breakToggle").checked;
+        planContentArray.push({ text, isDone });
+    });
+
+    var planData = {
+        Title: planTitle,
+        Text: JSON.stringify(planContentArray),
+        IsArchived: false,
+        IsPinned: isPinned
+    };
+
+    return planData;
+}
+
 /* ----------------------------- Requests ----------------------------- */
 
-// Function to request the user habits
-async function getHabitsData() {
-    try {
-        const response = await fetch('https://localhost:7131/api/Tasks/GetHabits', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-            },
-        });
-        
-        if (!response.ok) {
-            throw new Error(response.statusText + `HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data.habits;
-    } catch (error) {
-        console.error('Error:', error);
-        return null;
-    }
-}
-
-// Function to request the list of user tasks
-function getUserData() {
-    fetch('https://localhost:7131/api/Tasks/GetNotArchivedTasks', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(response.message + `HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.tasksList != null) {
-                displayObjects(data.tasksList);
-            } else {
-                console.log("No tasks available");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-// Function to request adding a task to the DB
-async function addTask(blockName) {
-    const taskBlock = document.getElementById(blockName);
-    if(taskBlock.querySelector("#taskTitle").textContent == "Habits"){
-        console.log("Can`t save task with title like this");
+// Function to request adding a Plan to the DB
+async function addPlan(blockName) {
+    var request = GetPlanData(blockName);
+    if (planData.Title == "Habits") {
+        console.log("Can`t save Plan with title like this");
         alert("Incorrect title, please change it");
         return false;
     }
 
-    const pinButton = document.getElementById("pinButton");
-
-    // Get the content of "done-toggle" elements
-    const doneToggleElements = taskBlock.querySelectorAll(".done-toggle");
-
-    // Create an array to store text and status
-    const taskContentArray = [];
-
-    // Iterate over "done-toggle" elements and gather text and status
-    doneToggleElements.forEach(doneToggleElement => {
-        const text = doneToggleElement.querySelector("p").textContent;
-        const isDone = doneToggleElement.querySelector("#breakToggle").checked;
-        taskContentArray.push({ text, isDone });
-    });
-
-    var taskData = {
-        user_id: getUserId("jwtToken"),
-        name: taskBlock.querySelector("#taskTitle").textContent,
-        text: JSON.stringify(taskContentArray),
-        is_archive: false,
-        notification_time: new Date().toISOString(),
-        is_pin: pinButton.classList.contains("pinned")
-    };
-
     try {
-        await serverRequest('Tasks/AddTask', 'POST', taskData);
+        await serverRequest('Plan/AddPlan', 'POST', request);
     } catch (error) {
-        console.error('Error adding task:', error);
+        console.error('Error adding Plan:', error);
     }
 
     return true;
 }
 
-// Function to request updating a task
+// Function to request updating a Plan
 async function updateData(blockName) {
-    const taskBlock = document.getElementById(blockName);
-    const tasktitle = taskBlock.querySelector("h3");
-    if(tasktitle.textContent == "Habits" && tasktitle.id != localStorage.getItem('habits_id')){
-        console.log("Can`t save task with title like this");
-        alert("Incorrect title, please change it");
-        return false;
-    }
-    const pinButton = taskBlock.querySelector(".pin-button");
+    var planData = GetPlanData(blockName);
 
-    // Get the content of "done-toggle" elements
-    const doneToggleElements = taskBlock.querySelectorAll(".done-toggle");
-
-    // Create an array to store text and status
-    const taskContentArray = [];
-
-    // Iterate over "done-toggle" elements and gather text and status
-    doneToggleElements.forEach(doneToggleElement => {
-        const text = doneToggleElement.querySelector("p").textContent;
-        const isDone = doneToggleElement.querySelector("#breakToggle").checked;
-        taskContentArray.push({ text, isDone });
-    });
-
-    var userData = {
-        id: parseInt(taskBlock.querySelector("h3").id),
-        name: taskBlock.querySelector("h3").textContent,
-        text: JSON.stringify(taskContentArray),
-        is_archive: false,
-        notification_time: new Date().toISOString(),
-        is_pin: pinButton.classList.contains("pinned")
+    var request = {
+        Id: parseInt(planBlock.querySelector("#planTitle").id),
+        Title: planData.Title,
+        Text: planData.Text,
+        IsPinned: planData.IsPinned
     };
 
     try {
-        await serverRequest('Tasks/UpdateTask', 'PATCH', userData);
+        await serverRequest('Plan/UpdatePlan', 'PATCH', request);
     } catch (error) {
-        console.error('Error updating task:', error);
+        console.error('Error updating Plan:', error);
     }
 
     return true;
 }
 
-// Function to request updating the pinned status of a task
+// Function to request copying a Plan
+async function copyPlan(PlanName){
+    const planBlock = document.getElementById(PlanName);
+    var requestData = {
+        request: parseInt(planBlock.querySelector('h3').id),
+    };
+
+    try {
+        await serverRequest('Plan/CopyPlan', 'POST', requestData);
+    } catch (error) {
+        console.error('Plan copy error:', error);
+    }
+}
+
+// Function to request updating the pinned status of a Plan
 async function updatePin(pin) {
     var requestData = {
-        id: parseInt(pin.id.replace('pin', ''), 10),
-        status: pin.classList.contains("pinned")
+        request: parseInt(pin.id.replace('pin', ''), 10),
     };
 
     try {
-        await serverRequest('Tasks/UpdateTaskPin', 'PATCH', requestData);
+        await serverRequest('Plan/UpdatePlanPin', 'PATCH', requestData);
     } catch (error) {
-        console.error('Error updating task pin:', error);
+        console.error('Error updating Plan pin:', error);
     }
 }
 
-// Function to request copying a task
-async function copyTask(TaskName){
-    const taskBlock = document.getElementById(TaskName);
+// Function to request archiving a Plan
+async function archivePlan(PlanName){
+    const planBlock = document.getElementById(PlanName);
     var requestData = {
-        id: parseInt(taskBlock.querySelector('h3').id),
-    };
-
-    try {
-        await serverRequest('Tasks/CopyTask', 'POST', requestData);
-    } catch (error) {
-        console.error('Task copy error:', error);
-    }
-}
-
-// Function to request deleting a task
-async function deleteTask(TaskName){
-    const taskBlock = document.getElementById(TaskName);
-    var requestData = {
-        id: parseInt(taskBlock.querySelector('h3').id),
-    };
-
-    // check if this block selected
-    var selectedTask = localStorage.getItem('selected_task');
-    if (selectedTask == parseInt(taskBlock.querySelector('h3').id)) {
-        localStorage.removeItem('selected_task');
-    }
-
-    try {
-        await serverRequest('Tasks/DeleteTask', 'DELETE', requestData);
-    } catch (error) {
-        console.error('Error deleting task:', error);
-    }
-    taskBlock.classList.remove("active");
-}
-
-// Function to request archiving a task
-async function archiveTask(TaskName){
-    const taskBlock = document.getElementById(TaskName);
-    var requestData = {
-        id: parseInt(taskBlock.querySelector('h3').id),
-        status: true
+        request: parseInt(planBlock.querySelector('h3').id)
     };
 
      // check if this block selected
-     var selectedTask = localStorage.getItem('selected_task');
-     if (selectedTask == parseInt(taskBlock.querySelector('h3').id)) {
-         localStorage.removeItem('selected_task');
+     var selectedPlan = localStorage.getItem('selected_plan');
+     if (selectedPlan == parseInt(planBlock.querySelector('h3').id)) {
+         localStorage.removeItem('selected_plan');
      }
 
     try {
-        await serverRequest('Tasks/ArchiveTask', 'PATCH', requestData);
+        await serverRequest('Plan/ArchivePlan', 'PATCH', requestData);
     } catch (error) {
-        console.error('Error archiving task:', error);
+        console.error('Error archiving Plan:', error);
     }
-    taskBlock.classList.remove("active");
+    planBlock.classList.remove("active");
 }
 
-// Function for task notification
-function notificationTask(TaskName){
+// Function for Plan notification
+function notificationPlan(PlanName){
+}
+
+// Function to request deleting a Plan
+async function deletePlan(PlanName){
+    const planBlock = document.getElementById(PlanName);
+    var requestData = {
+        Id: parseInt(planBlock.querySelector('h3').id),
+    };
+
+    // check if this block selected
+    var selectedPlan = localStorage.getItem('selected_plan');
+    if (selectedPlan == parseInt(planBlock.querySelector('h3').id)) {
+        localStorage.removeItem('selected_plan');
+    }
+
+    try {
+        await serverRequest('Plan/DeletePlan', 'DELETE', requestData);
+    } catch (error) {
+        console.error('Error deleting Plan:', error);
+    }
+    planBlock.classList.remove("active");
+}
+
+// Template function for sending a request
+async function serverRequest(path, type, requestObject) {
+    $.ajax({
+        url: 'https://localhost:7232/' + path,
+        type: type,
+        contentType: 'application/json',
+        data: JSON.stringify(requestObject),
+        success: function (data) {
+            console.log(data.message);
+            window.location.href = '/Plan/Get';
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.error('There was a problem with the fetch operation:', errorThrown);
+            throw errorThrown;
+        }
+    });
 }

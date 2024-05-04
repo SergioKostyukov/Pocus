@@ -23,7 +23,6 @@ function saveTogglePin(pinID) {
     updatePin(pinButton);
 }
 
-
 // Function triggered when the save button is clicked
 function saveUpdate(blockName) {
     const modal = document.getElementById(blockName);
@@ -84,12 +83,12 @@ function fillUpdateModal(updateObjectBlock, objectBlock) {
         addSaveButton(updateObjectBlock, `saveUpdate('updateNote')`)
     } else {
         if(title != "Habits"){
-            addCopyButton(updateObjectBlock, `copyTask('updateTask')`)
-            addDeleteButton(updateObjectBlock, `deleteTask('updateTask')`)
-            addArchiveButton(updateObjectBlock, `archiveTask('updateTask')`)
-            addNotificationButton(updateObjectBlock, 'updateTask')
+            addCopyButton(updateObjectBlock, `copyPlan('updateTask')`)
+            addDeleteButton(updateObjectBlock, `deletePlan('updateTask')`)
+            addArchiveButton(updateObjectBlock, `archivePlan('updateTask')`)
+            addNotificationButton(updateObjectBlock, 'updatePlan')
         }else{
-            addNotificationButton(updateObjectBlock, 'updateTask', "first")
+            addNotificationButton(updateObjectBlock, 'updatePlan', "first")
             addResetCheckboxButton(updateObjectBlock, `resetCheckboxValues('updateTask')`);
         }
         addSaveButton(updateObjectBlock, `saveUpdate('updateTask')`)
@@ -168,95 +167,4 @@ function addSaveButton(updateObjectBlock, command) {
     saveChangesButton.setAttribute('onclick', command);
     saveChangesButton.textContent = 'Save Changes';
     updateObjectBlock.appendChild(saveChangesButton);
-}
-
-// ------------------------- Generation of .task-panel window elements -------------------------
-
-async function displayObjects(objects){
-    const objectsPanel = document.querySelector('.tasks-panel');
-    const pinnedObjects = [];
-    const otherObjects = [];
-
-    // Clear the objects panel before adding new ones
-    objectsPanel.innerHTML = '';
-    
-    // Add habits block data
-    if(localStorage.getItem('ignore_habits') === 'false'){
-        const habits = await findHabbits();
-        if(habits != null) {
-            objects.unshift(habits);
-        }
-    }
-
-    // Iterate over each object and create the corresponding HTML block
-    objects.forEach(object => {
-        const objectBlock = document.createElement('div');
-        objectBlock.classList.add('task-block');
-        objectBlock.id = 'block' + object.id;
-
-        // Add the object title
-        const objectTitle = document.createElement('h3');
-        objectTitle.textContent = object.name;
-        objectBlock.appendChild(objectTitle);
-
-        // Add a separator
-        const divider = document.createElement('hr');
-        objectBlock.appendChild(divider);
-
-        // Add the "pin" button
-        const pinButton = document.createElement('button');
-        pinButton.classList.add('action-button', 'pin-button');
-        if (object.is_pin) {
-            pinButton.classList.add('pinned');
-            pinnedObjects.push(objectBlock);
-        } else {
-            otherObjects.push(objectBlock);
-        }
-        const pinImage = document.createElement('img');
-        pinImage.src = 'images/pin.png';
-        pinImage.alt = 'pin';
-        pinButton.id = 'pin' + object.id;
-        pinButton.setAttribute('onclick', `saveTogglePin('${pinButton.id}')`);
-        pinButton.appendChild(pinImage);
-        objectBlock.appendChild(pinButton);
-
-        fillObjectsTextContainer(objectBlock, object);
-        
-        // Insert pinned objects
-        pinnedObjects.forEach(objectBlock => {
-            objectsPanel.appendChild(objectBlock);
-        });
-
-        // Insert other objects
-        otherObjects.forEach(objectBlock => {
-            objectsPanel.appendChild(objectBlock);
-        });
-    });
-}
-
-// ------------------------- Request -------------------------
-
-// Template function for sending a request (without data returned)
-async function serverRequest(path, type, requestObject) {
-    try {
-        const response = await fetch('https://localhost:7131/api/' + path, {
-            method: type,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-            },
-            body: JSON.stringify(requestObject)
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        console.log(data.message);
-        getUserData();
-    } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        throw error;
-    }
 }

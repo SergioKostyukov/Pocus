@@ -2,7 +2,7 @@
 
 namespace Pocus.Application.Interfaces;
 
-public interface INoteService
+public interface INoteService : IObjectService
 {
     public Task Create(NoteDto request);
     public Task<NoteViewDto?> GetById(int noteId);

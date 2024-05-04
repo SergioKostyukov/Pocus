@@ -10,7 +10,7 @@ namespace Pocus.Application.Services;
 
 internal class NoteService(ILogger<NoteService> logger,
                                PocusDbContext dbContext,
-                               IMapper mapper) : IObjectService, INoteService
+                               IMapper mapper) : INoteService
 {
     private readonly ILogger<NoteService> _logger = logger;
     private readonly PocusDbContext _dbContext = dbContext;

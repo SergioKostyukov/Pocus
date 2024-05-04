@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Pocus.Application.Dto;
+using Pocus.Application.Interfaces;
 using System.Security.Claims;
 
 namespace Pocus.WebUI.Controllers
@@ -16,5 +18,20 @@ namespace Pocus.WebUI.Controllers
         {
             return View("~/Views/Concentration/Concentration.cshtml");
         }
+
+        //[HttpPatch]
+        //public async Task<IActionResult> UpdatePlanText([FromBody] ObjectUpdateTextDto request)
+        //{
+        //    try
+        //    {
+        //        await _planService.UpdateText(request);
+
+        //        return Ok(new { message = "Plan test update successfully" });
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest(new { message = "Plan test update failed" });
+        //    }
+        //}
     }
 }

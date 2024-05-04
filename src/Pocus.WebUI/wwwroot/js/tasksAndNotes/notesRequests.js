@@ -139,3 +139,21 @@ async function archiveNote(NoteName) {
     }
     noteBlock.classList.remove("active");
 }
+
+// Template function for sending a request (without data returned)
+async function serverRequest(path, type, requestObject) {
+    $.ajax({
+        url: 'https://localhost:7232/' + path,
+        type: type,
+        contentType: 'application/json',
+        data: JSON.stringify(requestObject),
+        success: function (data) {
+            console.log(data.message);
+            window.location.href = '/Note/Get';
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.error('There was a problem with the fetch operation:', errorThrown);
+            throw errorThrown;
+        }
+    });
+}
