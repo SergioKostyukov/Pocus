@@ -20,11 +20,13 @@ async function addPlan(blockName) {
 async function updateData(blockName) {
     var planData = GetPlanData(blockName);
 
+    var { Title, Text, IsArchived, IsPinned } = planData;
     var request = {
         Id: parseInt(document.getElementById(blockName).querySelector('h3').id),
-        Title: planData.Title,
-        Text: planData.Text,
-        IsPinned: planData.IsPinned
+        Title,
+        Text,
+        IsArchived,
+        IsPinned
     };
 
     var requestParams = {
@@ -88,7 +90,7 @@ async function archivePlan(PlanName) {
     await serverRequest(requestParams);
 }
 
-function notificationPlan(PlanName) {
+async function notificationPlan(PlanName) {
 }
 
 async function deletePlan(PlanName) {
@@ -110,9 +112,8 @@ async function deletePlan(PlanName) {
     await serverRequest(requestParams);
 }
 
-// Template function for sending a request
 async function serverRequest(request) {
-    $.ajax({
+    await $.ajax({
         url: 'https://localhost:7232/Plan/' + request.Path,
         type: request.Type,
         contentType: 'application/json',
@@ -121,34 +122,29 @@ async function serverRequest(request) {
             console.log(data.message);
             window.location.href = '/Plan/Get';
         },
-        error: function (xhr, textStatus, errorThrown) {
-            console.error(`Error! ${request.ErrorMessage}:`, errorThrown);
-            alert(`Error! ${request.ErrorMessage}:`, errorThrown);
+        error: function (error) {
+            console.error(`Error! ${request.ErrorMessage}:`, error);
+            alert(`Error! ${request.ErrorMessage}:`, error);
         }
     });
 }
 
 /* ----------------------------- Helpers ----------------------------- */
-
 function GetPlanData(blockName) {
     const planBlock = document.getElementById(blockName);
+
     const planTitle = planBlock.querySelector('h3').textContent;
 
-    const pinButton = planBlock.querySelector(".pin-button");
-    var isPinned = pinButton.classList.contains("pinned");
-
-    // Get the content of "done-toggle" elements
     const doneToggleElements = planBlock.querySelectorAll(".done-toggle");
-
-    // Create an array to store text and status
     const planContentArray = [];
-
-    // Iterate over "done-toggle" elements and gather text and status
     doneToggleElements.forEach(doneToggleElement => {
         const text = doneToggleElement.querySelector("p").textContent;
         const isDone = doneToggleElement.querySelector("#breakToggle").checked;
         planContentArray.push({ text, isDone });
     });
+
+    const pinButton = planBlock.querySelector(".pin-button");
+    var isPinned = pinButton.classList.contains("pinned");
 
     var planData = {
         Title: planTitle,

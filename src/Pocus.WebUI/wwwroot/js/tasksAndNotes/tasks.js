@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    modalUpdate.addEventListener("click", function (event) {
+    window.addEventListener("click", function (event) {
         if (event.target === modalUpdate) {
             modalUpdate.classList.remove("active");
         }

@@ -1,159 +1,151 @@
-/* ----------------------------- Requests ----------------------------- */
-
-// Function to request the list of user notes
-function getUserData() {
-    fetch('https://localhost:7131/api/Notes/GetNotArchivedNotes', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(response.message + `HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.notesList != null) {
-                displayObjects(data.notesList);
-            } else {
-                console.log("No notes available");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-// Function to request adding a note to the DB
 async function addNote(blockName) {
-    const noteBlock = document.getElementById(blockName);
-    const doneToggleElement = noteBlock.querySelector(".text-container");
-    const pinButton = document.getElementById("pinButton");
+    var noteData = GetNoteData(blockName);
 
-    var noteData = {
-        user_id: getUserId("jwtToken"),
-        name: noteBlock.querySelector("#noteTitle").textContent,
-        text: doneToggleElement.querySelector("p").textContent,
-        is_archive: false,
-        is_pin: pinButton.classList.contains("pinned")
-    };
-
-    try {
-        await serverRequest('Notes/AddNote', 'POST', noteData);
-    } catch (error) {
-        console.error('Error adding note:', error);
+    var requestParams = {
+        Path: 'AddNote',
+        Type: 'POST',
+        RequestObject: noteData,
+        ErrorMessage: 'Adding Note'
     }
+
+    await serverRequest(requestParams);
 }
 
-// Function to request updating a note
 async function updateData(blockName) {
-    const noteBlock = document.getElementById(blockName);
-    const doneToggleElement = noteBlock.querySelector(".text-container");
-    const pinButton = noteBlock.querySelector(".pin-button");
+    var noteData = GetNoteData(blockName);
 
-    var userData = {
-        id: parseInt(noteBlock.querySelector("h3").id),
-        name: noteBlock.querySelector("h3").textContent,
-        text: doneToggleElement.querySelector("p").textContent,
-        is_archive: false,
-        is_pin: pinButton.classList.contains("pinned")
+    var { Title, Text, IsPinned } = noteData;
+    var request = {
+        Id: parseInt(document.getElementById(blockName).querySelector('h3').id),
+        Title,
+        Text,
+        IsPinned
     };
 
-    try {
-        await serverRequest('Notes/UpdateNote', 'PATCH', userData);
-    } catch (error) {
-        console.error('Error updating note:', error);
+    console.log(request.IsPinned)
+
+    var requestParams = {
+        Path: 'UpdateNote',
+        Type: 'PATCH',
+        RequestObject: request,
+        ErrorMessage: 'Updating Note'
     }
+
+    await serverRequest(requestParams);
 }
 
-// Function to request updating the pinned status of a note
-async function updatePin(pin) {
-    var requestData = {
-        id: parseInt(pin.id.replace('pin', ''), 10),
-        status: pin.classList.contains("pinned")
-    };
-
-    try {
-        await serverRequest('Notes/UpdateNotePin', 'PATCH', requestData);
-    } catch (error) {
-        console.error('Error updating note pin:', error);
-    }
-}
-
-// Function to request copying a note
 async function copyNote(NoteName) {
     const noteBlock = document.getElementById(NoteName);
+
     var requestData = {
         id: parseInt(noteBlock.querySelector('h3').id),
     };
 
-    try {
-        await serverRequest('Notes/CopyNote', 'POST', requestData);
-    } catch (error) {
-        console.error('Note copy error:', error);
+    var requestParams = {
+        Path: 'CopyNote',
+        Type: 'POST',
+        RequestObject: requestData,
+        ErrorMessage: 'Copy Note'
     }
+
+    await serverRequest(requestParams);
 }
 
-// Function to request deleting a note
-async function deleteNote(NoteName) {
-    const noteBlock = document.getElementById(NoteName);
+async function updatePin(pin) {
     var requestData = {
-        id: parseInt(noteBlock.querySelector('h3').id),
+        Id: parseInt(pin.id.replace('pin', ''), 10)
     };
 
-    // check if this block selected
-    var selectedNote = localStorage.getItem('selected_note');
-    if (selectedNote == parseInt(noteBlock.querySelector('h3').id)) {
-        localStorage.removeItem('selected_note');
+    var requestParams = {
+        Path: 'UpdateNotePin',
+        Type: 'PATCH',
+        RequestObject: requestData,
+        ErrorMessage: 'Updating Note pin'
     }
 
-    try {
-        await serverRequest('Notes/DeleteNote', 'DELETE', requestData);
-    } catch (error) {
-        console.error('Error deleting note:', error);
-    }
-    noteBlock.classList.remove("active");
+    await serverRequest(requestParams);
 }
 
-// Function to request archiving a note
 async function archiveNote(NoteName) {
     const noteBlock = document.getElementById(NoteName);
+
+    UnselectItem(noteBlock.querySelector('h3').id);
+
     var requestData = {
-        id: parseInt(noteBlock.querySelector('h3').id),
-        status: true
+        Id: parseInt(noteBlock.querySelector('h3').id),
     };
 
-    // check if this block selected
-    var selectedNote = localStorage.getItem('selected_note');
-    if (selectedNote == parseInt(noteBlock.querySelector('h3').id)) {
-        localStorage.removeItem('selected_note');
+    var requestParams = {
+        Path: 'ArchiveNote',
+        Type: 'PATCH',
+        RequestObject: requestData,
+        ErrorMessage: 'Archiving Note'
     }
 
-    try {
-        await serverRequest('Notes/ArchiveNote', 'PATCH', requestData);
-    } catch (error) {
-        console.error('Error archiving note:', error);
-    }
-    noteBlock.classList.remove("active");
+    await serverRequest(requestParams);
 }
 
-// Template function for sending a request (without data returned)
-async function serverRequest(path, type, requestObject) {
-    $.ajax({
-        url: 'https://localhost:7232/' + path,
-        type: type,
+async function deleteNote(NoteName) {
+    const noteBlock = document.getElementById(NoteName);
+
+    UnselectItem(noteBlock.querySelector('h3').id);
+
+    var requestData = {
+        Id: parseInt(noteBlock.querySelector('h3').id),
+    };
+
+    var requestParams = {
+        Path: 'DeleteNote',
+        Type: 'DELETE',
+        RequestObject: requestData,
+        ErrorMessage: 'Deleting Note'
+    }
+
+    await serverRequest(requestParams);
+}
+
+async function serverRequest(request) {
+    await $.ajax({
+        url: 'https://localhost:7232/Note/' + request.Path,
+        type: request.Type,
         contentType: 'application/json',
-        data: JSON.stringify(requestObject),
+        data: JSON.stringify(request.RequestObject),
         success: function (data) {
             console.log(data.message);
             window.location.href = '/Note/Get';
         },
-        error: function (xhr, textStatus, errorThrown) {
-            console.error('There was a problem with the fetch operation:', errorThrown);
-            throw errorThrown;
+        error: function (error) {
+            console.error(`Error! ${request.ErrorMessage}:`, error);
+            alert(`Error! ${request.ErrorMessage}:`, error);
         }
     });
+}
+
+/* ----------------------------- Helpers ----------------------------- */
+function GetNoteData(blockName) {
+    const noteBlock = document.getElementById(blockName);
+
+    const noteTitle = noteBlock.querySelector('h3').textContent;
+
+    const noteBodyElement = noteBlock.querySelector(".text-container");
+    const boteContent = noteBodyElement.querySelector("p").textContent;
+
+    const pinButton = noteBlock.querySelector(".pin-button");
+    var isPinned = pinButton.classList.contains("pinned");
+
+    var noteData = {
+        Title: noteTitle,
+        Text: boteContent,
+        IsArchived: false,
+        IsPinned: isPinned
+    };
+
+    return noteData;
+}
+
+function UnselectItem(id) {
+    var selectedPlan = localStorage.getItem('selected_note');
+    if (selectedPlan == parseInt(id)) {
+        localStorage.removeItem('selected_note');
+    }
 }

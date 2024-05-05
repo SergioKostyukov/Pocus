@@ -35,7 +35,6 @@ namespace Pocus.WebUI.Controllers
 
             var model = new PlanModel
             {
-                UserId = userId,
                 Plans = plans
             };
 
@@ -57,7 +56,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPlan([FromBody] PlanAddDto plan)
+        public async Task<IActionResult> AddPlan([FromBody] NoteAddDto plan)
         {
             var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                 ?? throw new InvalidOperationException("User not found");
@@ -76,7 +75,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CopyPlan([FromBody] PlanRequest request)
+        public async Task<IActionResult> CopyPlan([FromBody] ObjectRequest request)
         {
             try
             {
@@ -106,7 +105,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdatePlanPin([FromBody] PlanRequest request)
+        public async Task<IActionResult> UpdatePlanPin([FromBody] ObjectRequest request)
         {
             try
             {
@@ -121,7 +120,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> ArchivePlan([FromBody] PlanRequest request)
+        public async Task<IActionResult> ArchivePlan([FromBody] ObjectRequest request)
         {
             try
             {
@@ -136,7 +135,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeletePlan([FromBody] PlanRequest request)
+        public async Task<IActionResult> DeletePlan([FromBody] ObjectRequest request)
         {
             try
             {

@@ -6,7 +6,7 @@ public class PlanText
     public string Text { get; set; }
 }
 
-public class PlanRequest
+public class ObjectRequest
 {
     public int Id { get; set; }
 }

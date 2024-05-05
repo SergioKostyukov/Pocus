@@ -16,7 +16,7 @@ internal class NoteService(ILogger<NoteService> logger,
     private readonly PocusDbContext _dbContext = dbContext;
     private readonly IMapper _mapper = mapper;
 
-    public async Task Create(NoteDto request)
+    public async Task Create(NoteAddDto request)
     {
         try
         {
@@ -65,7 +65,7 @@ internal class NoteService(ILogger<NoteService> logger,
             throw;
         }
     }
-    public async Task<NoteViewDto?> GetById(int noteId)
+    public async Task<NoteViewDto> GetById(int noteId)
     {
         var note = await _dbContext.Notes
             .Where(x => x.Id == noteId)
@@ -73,7 +73,7 @@ internal class NoteService(ILogger<NoteService> logger,
 
         return _mapper.Map<NoteViewDto>(note);
     }
-    public async Task<List<NoteDto>?> GetArchived(string userId)
+    public async Task<List<NoteDto>> GetArchived(string userId)
     {
         var userNotes = await _dbContext.Notes
                     .Where(x => x.UserId == userId &&
@@ -83,7 +83,7 @@ internal class NoteService(ILogger<NoteService> logger,
 
         return _mapper.Map<List<NoteDto>>(userNotes);
     }
-    public async Task<List<NoteDto>?> GetNotArchived(string userId)
+    public async Task<List<NoteDto>> GetNotArchived(string userId)
     {
         var userNotes = await _dbContext.Notes
                     .Where(x => x.UserId == userId &&
@@ -93,7 +93,7 @@ internal class NoteService(ILogger<NoteService> logger,
 
         return _mapper.Map<List<NoteDto>>(userNotes);
     }
-    public async Task<List<ObjectTitleDto>?> GetTitlesOfNotArchived(string userId)
+    public async Task<List<ObjectTitleDto>> GetTitlesOfNotArchived(string userId)
     {
         var userNotes = await _dbContext.Notes
             .Where(x => x.UserId == userId &&

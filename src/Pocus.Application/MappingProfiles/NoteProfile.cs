@@ -10,6 +10,7 @@ internal class NoteProfile : Profile
     {
         CreateMap<Note, NoteDto>();
         CreateMap<NoteDto, Note>();
+        CreateMap<NoteAddDto, Note>();
         CreateMap<NoteViewDto, Note>();
         CreateMap<ObjectTitleDto, Note>();
     }

@@ -10,7 +10,7 @@ internal class PlanProfile : Profile
     {
         CreateMap<Plan, PlanDto>();
         CreateMap<PlanDto, Plan>();
-        CreateMap<PlanAddDto, Plan>();
+        CreateMap<NoteAddDto, Plan>();
         CreateMap<PlanViewDto, Plan>();
         CreateMap<ObjectTitleDto, Plan>();
     }

@@ -1,9 +1,77 @@
-﻿@section Style {
-    <link rel="stylesheet" href="~/css/mainPage.css" asp-append-version="true">
+﻿@using Pocus.Application.Dto
+
+@model NoteModel
+
+@section Style {
+    <link rel="stylesheet" href="~/css/tasks/tasks.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/tasks/modal.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/tasks/buttons.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/tasks/scrollbar.css" asp-append-version="true">
 }
 
+<div class="center-blocks" id="centerBlocks">
+    <div class="add-task-panel">
+        <button class="add-task-button">New note</button>
+    </div>
 
+    <div class="tasks-panel">
+        @if (Model.Notes == null || Model.Notes.Count() == 0)
+        {
+            <p>There are no notes yet</p>
+        }
+        else
+        {
+            foreach (var note in Model.Notes)
+            {
+                @Html.Raw(RenderNoteBlock(note))
+            }
+        }
+    </div>
+
+    <div class="modal" id="newNote">
+        <div class="modal-block task-block" id="newNoteBlock">
+            <h3 contenteditable="true" id="noteTitle">Note name</h3>
+            <button class="action-button pin-button" onclick="togglePin('pinButton')" id="pinButton">
+                <img src="~/images/pin.png" alt="pin">
+            </button>
+            <hr>
+            <div class="text-container">
+                <p contenteditable="true">Note body</p>
+            </div>
+            <button class="save-task-button">Save Changes</button>
+        </div>
+    </div>
+
+    <div class="modal" id="updateNote">
+        <div class="modal-block task-block" id="updateNoteBlock">
+        </div>
+    </div>
+</div>
+
+@functions {
+    string RenderNoteBlock(NoteDto note)
+    {
+        var taskBlock = new System.Text.StringBuilder();
+        taskBlock.Append($"<div class='task-block' id='block{note.Id}'>");
+        taskBlock.Append($"<h3>{note.Title}</h3>");
+        taskBlock.Append("<hr>");
+        taskBlock.Append($"<button class='action-button pin-button {(note.IsPinned ? "pinned" : "")}' id='pin{note.Id}' onclick='saveTogglePin(\"pin{note.Id}\")'>");
+        taskBlock.Append("<img src='/images/pin.png' alt='pin'>");
+        taskBlock.Append("</button>");
+        if (note.Text is not null)
+        {
+            taskBlock.Append("<div class='text-container'>");
+            taskBlock.Append($"<p contenteditable='false'>{note.Text}</p>");
+            taskBlock.Append("</div>");
+        }
+        taskBlock.Append("</div>");
+
+        return taskBlock.ToString();
+    }
+}
 
 @section Scripts {
-
+    <script src="~/js/tasksAndNotes/common.js" asp-append-version="true"></script>
+    <script src="~/js/tasksAndNotes/notes.js" asp-append-version="true"></script>
+    <script src="~/js/tasksAndNotes/notesRequests.js" asp-append-version="true"></script>
 }

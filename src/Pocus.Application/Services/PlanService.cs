@@ -31,7 +31,7 @@ internal class PlanService(ILogger<PlanService> logger,
 
         await _dbContext.SaveChangesAsync();
     }
-    public async Task Create(PlanAddDto request)
+    public async Task Create(NoteAddDto request)
     {
         try
         {

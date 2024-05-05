@@ -1,6 +1,6 @@
 // Function to reset the template when exiting creation mode
-function resetNoteBlock(modal_id) {
-    const modal = document.getElementById(modal_id);
+function resetNoteBlock(modalId) {
+    const modal = document.getElementById(modalId);
 
     // Reset the title value
     const noteTitle = modal.querySelector('#noteTitle');
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    modalUpdate.addEventListener("click", function (event) {
+    window.addEventListener("click", function (event) {
         if (event.target === modalUpdate) {
             modalUpdate.classList.remove("active");
         }
@@ -92,27 +92,3 @@ function fillUpdateTextContainer(updateNoteBlock, objectBlock) {
 
     updateNoteBlock.appendChild(textContainer);
 }
-
-// Function to display tasks on the page
-function fillObjectsTextContainer(objectBlock, object) {
-    // Add a container for the note text
-    const textContainer = document.createElement('div');
-    textContainer.classList.add('text-container');
-
-    // Check if there is note text
-    if (object.text) {
-        const paragraph = document.createElement('p');
-        paragraph.contentEditable = false;
-        paragraph.textContent = object.text;
-
-        textContainer.appendChild(paragraph);
-    }
-
-    objectBlock.appendChild(textContainer);
-}
-
-function findHabbits() {
-    return null;
-}
-
-getUserData();
