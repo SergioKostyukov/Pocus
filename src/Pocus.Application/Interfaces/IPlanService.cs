@@ -7,6 +7,7 @@ public interface IPlanService : IObjectService
     public Task CreateDefault(string userId);
     public Task Create(NoteAddDto request);
     public Task<PlanDto> GetHabits(string userId);
+    public Task<PlanViewDto> GetHabitsView(string userId);
     public Task<PlanViewDto> GetById(int planId);
     public Task<List<PlanDto>> GetArchived(string userId);
     public Task<List<PlanDto>> GetNotArchived(string userId);

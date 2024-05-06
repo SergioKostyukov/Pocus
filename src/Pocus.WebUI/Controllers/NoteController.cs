@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pocus.Application.Dto;
 using Pocus.Application.Interfaces;
+using Pocus.WebUI.Dto;
 using Pocus.WebUI.Models;
 using System.Security.Claims;
 
@@ -28,20 +29,6 @@ namespace Pocus.WebUI.Controllers
             return View("~/Views/Note/Notes.cshtml", model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetNoteById([FromQuery] int id)
-        {
-            NoteViewDto note = await _noteService.GetById(id);
-            if (note != null)
-            {
-                return Ok(new { message = "Note data get successful", note = note });
-            }
-            else
-            {
-                return Ok(new { message = "There are no such Note" });
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddNote([FromBody] NoteAddDto note)
         {
@@ -62,7 +49,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CopyNote([FromBody] ObjectRequest request)
+        public async Task<IActionResult> CopyNote([FromBody] IdRequestDto request)
         {
             try
             {
@@ -92,7 +79,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdateNotePin([FromBody] ObjectRequest request)
+        public async Task<IActionResult> UpdateNotePin([FromBody] IdRequestDto request)
         {
             try
             {
@@ -107,7 +94,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> ArchiveNote([FromBody] ObjectRequest request)
+        public async Task<IActionResult> ArchiveNote([FromBody] IdRequestDto request)
         {
             try
             {
@@ -122,7 +109,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteNote([FromBody] ObjectRequest request)
+        public async Task<IActionResult> DeleteNote([FromBody] IdRequestDto request)
         {
             try
             {

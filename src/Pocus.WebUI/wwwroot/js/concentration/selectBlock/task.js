@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    //--------------------------------TASK VIEW MODE--------------------------------
-
     const modalUpdate = document.getElementById("viewTask");
-    const viewTaskBlock = document.getElementById('viewTaskBlock');
 
     document.querySelector('.task-sets').addEventListener('click', function (event) {
         const taskBlock = event.target.closest('.task-title-block');
@@ -13,33 +10,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    modalUpdate.addEventListener("click", function (event) {
+    document.addEventListener("click", function (event) {
         if (event.target === modalUpdate) {
             modalUpdate.classList.remove("active");
-            viewTaskBlock.innerHTML = '';
         }
     });
 
-    async function ShowModal(taskBlock){
+    async function ShowModal(taskBlock) {
         var id = parseInt(taskBlock.id.replace('block', ''), 10);
-        var taskData = await getTaskData(id);
-        // Pass data to the modal window
-        fillViewModal(viewTaskBlock, id, taskData);
+        var taskData = await getPlanData(id);
+
+        fillViewModal('viewTaskBlock', taskData);
     }
 });
 
-// Function to fill the update task window
 function taskViewTextContainer(viewTaskBlock, objectData) {
-    // Add a container for the task text
     const textContainer = document.createElement('div');
     textContainer.classList.add('text-container');
 
-    // Check if there is task text
     if (objectData.text) {
-        // Parse the text as JSON
         const objectContentArray = JSON.parse(objectData.text);
 
-        // Iterate through the array elements and create corresponding HTML elements
         objectContentArray.forEach(objectContent => {
             const doneToggleElement = document.createElement('div');
             doneToggleElement.classList.add('done-toggle');
@@ -57,11 +48,9 @@ function taskViewTextContainer(viewTaskBlock, objectData) {
                 paragraph.classList.add("line-through");
             }
 
-            // Add the created elements to doneToggleElement
             doneToggleElement.appendChild(checkbox);
             doneToggleElement.appendChild(paragraph);
 
-            // Add doneToggleElement to textContainer
             textContainer.appendChild(doneToggleElement);
         });
     }
@@ -69,65 +58,28 @@ function taskViewTextContainer(viewTaskBlock, objectData) {
     viewTaskBlock.appendChild(textContainer);
 }
 
-function deactivateModalTask(){
+function deactivateModalTask() {
     const modal = document.getElementById("viewTask");
-    const viewTaskBlock = document.getElementById('viewTaskBlock');
     modal.classList.remove("active");
-    viewTaskBlock.innerHTML = '';
 }
 
 /* ----------------------------- Requests ----------------------------- */
-
-// Function to request the list of user tasks titles
-function getTitlesOfTasks() {
-    fetch('https://localhost:7131/api/Tasks/GetTitlesOfNotArchivedTasks', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(response.message + `HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.tasksList != null) {
-                displayObjects(data.tasksList, 'task');
-            } else {
-                console.log("No tasks available");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-// Function to request the user task by id
-async function getTaskData(id) {
+async function getPlanData(id) {
     try {
-        const response = await fetch(`https://localhost:7131/api/Tasks/GetTaskById?id=${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-            }
+        const response = await $.ajax({
+            url: `https://localhost:7232/Concentration/GetPlanById?id=${id}`,
+            type: 'GET',
+            contentType: 'application/json'
         });
 
-        if (!response.ok) {
-            throw new Error(response.message + `HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (data.task != null) {
-            return data.task;
+        if (response.plan != null) {
+            return response.plan;
         } else {
-            console.log("No tasks available");
+            console.log(response.message);
+            throw new Error(response.message);
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error! ', error);
+        alert('Error!', error);
     }
 }

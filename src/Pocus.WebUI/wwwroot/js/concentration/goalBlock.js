@@ -1,7 +1,6 @@
-
-function updateGoalBlock(){
-    var dayGoal = localStorage.getItem('day_goal');
-    var complete = localStorage.getItem('complete_time') || 0;
+function updateGoalBlock() {
+    var dayGoal = settingsData.DayGoal;
+    var complete = localStorage.getItem('complete_time') || 0; // get from statistic
     
     var goalValueElement = document.getElementById('dayGoalValue');
     var completeValueElement = document.getElementById('completeValue');

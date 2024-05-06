@@ -15,7 +15,7 @@ namespace Pocus.WebUI.Controllers
         private readonly ISettingsService _settingsService = settingsService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> Get()
         {
             var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                 ?? throw new InvalidOperationException("User not found");
@@ -61,7 +61,7 @@ namespace Pocus.WebUI.Controllers
         {
             await _settingsService.UpdateGoalParams(model.UserId, model.GoalSettings);
 
-            return View();
+            return View("~/Views/Settings/Settings.cshtml");
         }
 
         [HttpPost]
@@ -69,7 +69,7 @@ namespace Pocus.WebUI.Controllers
         {
             await _settingsService.UpdateOtherParams(model.UserId, model.OtherSettings);
 
-            return View();
+            return View("~/Views/Settings/Settings.cshtml");
         }
     }
 }

@@ -1,16 +1,14 @@
-// Function to fill the update modal window
-function fillViewModal(viewObjectBlock, id, objectData) {
-    // Clear the content of the update modal window before updating
+function fillViewModal(viewObjectBlockName, objectData) {
+    const viewObjectBlock = document.getElementById(viewObjectBlockName);
+
     viewObjectBlock.innerHTML = '';
 
-    // Add the object title
     const objTitle = document.createElement('h3');
-    objTitle.textContent = objectData.name;
-    objTitle.id = id;
+    objTitle.textContent = objectData.title;
+    objTitle.id = objectData.id;
     objTitle.contentEditable = false;
     viewObjectBlock.appendChild(objTitle);
 
-    // Add a separator
     const divider = document.createElement('hr');
     viewObjectBlock.appendChild(divider);
 
@@ -19,30 +17,29 @@ function fillViewModal(viewObjectBlock, id, objectData) {
 
         // check if this block selected
         var selectedTask = localStorage.getItem('selected_task');
-        if (selectedTask == id) {
-            addSelectButton(viewObjectBlock, `unselect('${id}', 'task')`, 'remove')
+        if (selectedTask == objectData.id) {
+            addSelectButton(viewObjectBlock, `unselect('${objectData.id}', 'task')`, 'remove')
         } else {
-            addSelectButton(viewObjectBlock, `select('${id}', 'task')`)
+            addSelectButton(viewObjectBlock, `select('${objectData.id}', 'task')`)
         }
     } else {
         noteViewTextContainer(viewObjectBlock, objectData);
 
         // check if this block selected
         var selectedNote = localStorage.getItem('selected_note');
-        if (selectedNote == id) {
-            addSelectButton(viewObjectBlock, `unselect('${id}', 'note')`, 'remove')
+        if (selectedNote == objectData.id) {
+            addSelectButton(viewObjectBlock, `unselect('${objectData.id}', 'note')`, 'remove')
         } else {
-            addSelectButton(viewObjectBlock, `select('${id}', 'note')`)
+            addSelectButton(viewObjectBlock, `select('${objectData.id}', 'note')`)
         }
     }
 }
 
-// Add the modal "select" button
 function addSelectButton(viewObjectBlock, command, image_ = 'add') {
     const button = document.createElement('button');
     button.classList.add('action-button');
     const image = document.createElement('img');
-    image.src = `images/${image_}.png`;
+    image.src = `/images/${image_}.png`;
     image.alt = 'copy';
     button.setAttribute('onclick', command);
     if (image_ == 'add') {
@@ -54,35 +51,18 @@ function addSelectButton(viewObjectBlock, command, image_ = 'add') {
     viewObjectBlock.appendChild(button);
 }
 
-function displayObjects(objects, name) {
-    const objectsPanel = document.querySelector(`.${name}-sets`);
-
-    // Clear the objects panel before adding new ones
-    objectsPanel.innerHTML = '';
-
+function HighlightSelectedObjects() {
     var selectedTask = localStorage.getItem('selected_task');
+    if (selectedTask != null) {
+        const obj = document.getElementById(`block${selectedTask}`);
+        obj.classList.add('highlighted');
+    }
+
     var selectedNote = localStorage.getItem('selected_note');
-    // Iterate over each object and create the corresponding HTML block
-    objects.forEach(object => {
-        if (object.name === 'Habits' && name === 'task') {
-
-        } else {
-            const objectData = document.createElement('div');
-            objectData.classList.add(`${name}-title-block`);
-            objectData.id = 'block' + object.id;
-
-            if (object.id == selectedNote || object.id == selectedTask) {
-                objectData.classList.add('highlighted');
-            }
-
-            // Add the object title
-            const objectTitle = document.createElement('h3');
-            objectTitle.textContent = object.name;
-            objectData.appendChild(objectTitle);
-
-            objectsPanel.appendChild(objectData);
-        }
-    });
+    if (selectedNote != null) {
+        const obj = document.getElementById(`block${selectedNote}`);
+        obj.classList.add('highlighted');
+    }
 }
 
 function select(ObjectId, type) {
@@ -124,10 +104,8 @@ function unselect(ObjectId, type) {
 }
 
 function setHabits() {
-    if (localStorage.getItem("ignore_habits") === 'false') {
-        // check if this block selected
-        var selectedHabits = localStorage.getItem('selected_habits');
-        if (selectedHabits !== null) {
+    if (!settingsData.IgnoreHabits) {
+        if (localStorage.getItem('selected_habits')) {
             localStorage.removeItem('selected_habits');
         } else {
             localStorage.setItem('selected_habits', 1);
@@ -135,7 +113,7 @@ function setHabits() {
 
         setObjectSelectBlock('habits');
     } else {
-        alert("Oops, maybe you are ignoring habits( Change this option in settings");
+        alert("Oops, maybe you are ignoring habits(\nChange this option in settings");
         return;
     }
 }
@@ -147,15 +125,15 @@ function setSelectBlocksImages() {
 }
 
 function setObjectSelectBlock(name) {
-    if (name === 'habits' && localStorage.getItem("ignore_habits") === 'true') {
+    if (name === 'habits' && settingsData.IgnoreHabits) {
         localStorage.removeItem('selected_habits');
     }
 
     var selectedTask = localStorage.getItem(`selected_${name}`);
     const selectTaskButton = document.getElementById(`select-${name}`);
     if (selectedTask !== null) {
-        selectTaskButton.querySelector('img').src = '.images/select_on.png';
+        selectTaskButton.querySelector('img').src = '/images/select_on.png';
     } else {
-        selectTaskButton.querySelector('img').src = '.images/select_off.png';
+        selectTaskButton.querySelector('img').src = '/images/select_off.png';
     }
 }

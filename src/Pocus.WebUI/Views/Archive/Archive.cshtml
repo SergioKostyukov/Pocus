@@ -1,4 +1,5 @@
 ﻿@using Newtonsoft.Json
+@using Pocus.WebUI.Dto
 
 @model ArchiveModel
 
@@ -36,7 +37,7 @@
                     <div class="text-container">
                         @if (plan.Text != null)
                         {
-                            var planContentArray = JsonConvert.DeserializeObject<List<PlanText>>(plan.Text);
+                            var planContentArray = JsonConvert.DeserializeObject<List<PlanToggleDto>>(plan.Text);
                             foreach (var planContent in planContentArray)
                             {
                                 <div class="done-toggle">

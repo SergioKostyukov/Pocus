@@ -1,9 +1,162 @@
-﻿@section Style {
-    <link rel="stylesheet" href="~/css/mainPage.css" asp-append-version="true">
+﻿@model ConcentrationModel
+
+@using Newtonsoft.Json
+@using Pocus.WebUI.Dto
+
+@section Style {
+    <link rel="stylesheet" href="~/css/concentration/concentration.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/concentration/timerBlock.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/concentration/goalBlock.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/concentration/selectBlock.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/concentration/selectBlockModal.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/concentration/scrollbar.css" asp-append-version="true">
 }
 
+<div class="center-blocks">
+    <div class="first-column">
+        <div class="block timer">
+            <a href="@Url.Action("Get", "Settings")" class="settings-button">
+                <img src="~/images/settings.png" alt="Settings">
+            </a>
 
+            <div class="timer-control">
+                <div class="timer-display" id="timerDisplay">00:00</div>
+                <div class="timer-buttons">
+                    <button class="timer-button" onclick="increaseTimer()">
+                        <img src="~/images/arrow_up.png" alt="Increase">
+                    </button>
+                    <button class="timer-button" onclick="decreaseTimer()">
+                        <img src="~/images/arrow_down.png" alt="Reduse">
+                    </button>
+                    <button class="timer-button" onclick="resetTimerValue()">
+                        <img src="~/images/reset.png" alt="Reset">
+                    </button>
+                </div>
+            </div>
+
+            <p id="numberBreks">Number of breaks: 0</p>
+
+            <div class="break-toggle">
+                <input type="checkbox" id="breakToggle" />
+                <label for="breakToggle">Disable breaks</label>
+            </div>
+
+            <button class="start-button" id="startTimerButton">Start session</button>
+        </div>
+
+        <div class="block goals">
+            <div class="goal-item">
+                <div class="goal-label">Yesterday</div>
+                <div class="goal-value" id="yesterdayValue">0 hours</div>
+            </div>
+
+            <div class="goal-item central-block">
+                <div class="goal-label">Day goal:</div>
+                <div class="goal-value" id="dayGoalValue">0 hours</div>
+                <div class="goal-label">Done:</div>
+                <div class="goal-value" id="completeValue">0 hours</div>
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div class="goal-item">
+                <div class="goal-label">Series</div>
+                <div class="goal-value" id="seriesValue">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="second-column">
+        <div class="block select">
+            <h2>Select</h2>
+            <div class="block-item select-item">
+                <button class="select-block" id="select-task" title="Select task">
+                    <img alt="Task">
+                </button>
+                <button class="select-block" id="select-note" title="Select note">
+                    <img alt="Note">
+                </button>
+                <button class="select-block" id="select-habits" onclick="setHabits()" title="Activate habits">
+                    <img alt="Habits">
+                </button>
+            </div>
+
+            <h2>Task sets</h2>
+            <div class="block-item task-sets">
+                @foreach (var plan in Model.Plans)
+                {
+                    <div class="task-title-block" id="block@(plan.Id)">
+                        <h3>@plan.Title</h3>
+                    </div>
+                }
+            </div>
+
+            <div class="half-line">
+                <h2>Notes</h2>
+            </div>
+            <div class="half-line">
+                <h2>Habits</h2>
+            </div>
+            <div class="block-item notes-habits">
+                <div class="note-sets">
+                    @foreach (var note in Model.Notes)
+                    {
+                        <div class="note-title-block" id="block@(note.Id)">
+                            <h3>@note.Title</h3>
+                        </div>
+                    }
+                </div>
+
+                <div class="habits-item">
+                    <div class="text-container">
+                        @if (Model.Habits.Text is not null)
+                        {
+                            @Html.Raw(FillTextContainer(Model.Habits.Text))
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="viewTask">
+        <div class="modal-block" id="viewTaskBlock">
+        </div>
+    </div>
+
+    <div class="modal" id="viewNote">
+        <div class="modal-block" id="viewNoteBlock">
+        </div>
+    </div>
+</div>
+
+@functions {
+    string FillTextContainer(string text)
+    {
+        var textContainer = new System.Text.StringBuilder();
+        var objectContentArray = JsonConvert.DeserializeObject<List<PlanToggleDto>>(text);
+
+        foreach (var objectContent in objectContentArray)
+        {
+            textContainer.Append("<div class='done-toggle'>");
+            textContainer.Append($"<input type='checkbox' id='breakToggle' {(objectContent.IsDone ? "checked" : "")} disabled>");
+            textContainer.Append($"<p contenteditable='false' {(objectContent.IsDone ? "class='line-through'" : "")}>{objectContent.Text}</p>");
+            textContainer.Append("</div>");
+        }
+
+        return textContainer.ToString();
+    }
+}
 
 @section Scripts {
+    <script>
+        var settingsData = @Html.Raw(JsonConvert.SerializeObject(Model.Settings));
+    </script>
 
+    <script src="~/js/concentration/selectBlock/common.js" asp-append-version="true"></script>
+    <script src="~/js/concentration/selectBlock/task.js" asp-append-version="true"></script>
+    <script src="~/js/concentration/selectBlock/note.js" asp-append-version="true"></script>
+
+    <script src="~/js/concentration/timerBlock.js" asp-append-version="true"></script>
+    <script src="~/js/concentration/goalBlock.js" asp-append-version="true"></script>
+    <script src="~/js/concentration/concentrationPage.js" asp-append-version="true"></script>
 }

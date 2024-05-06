@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    //-------------------------------- NOTE UPDATE MODE --------------------------------
-
     const modalUpdate = document.getElementById("viewNote");
-    const viewNoteBlock = document.getElementById('viewNoteBlock');
 
     document.querySelector('.note-sets').addEventListener('click', function (event) {
         const noteBlock = event.target.closest('.note-title-block');
@@ -13,24 +10,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    modalUpdate.addEventListener("click", function (event) {
+    document.addEventListener("click", function (event) {
         if (event.target === modalUpdate) {
             modalUpdate.classList.remove("active");
-            viewNoteBlock.innerHTML = '';
         }
     });
 
     async function ShowModal(noteBlock) {
         var id = parseInt(noteBlock.id.replace('block', ''), 10);
-        noteData = await getNoteData(id);
-        // Pass data to the modal window
-        fillViewModal(viewNoteBlock, id, noteData);
+        var noteData = await getNoteData(id);
+
+        fillViewModal('viewNoteBlock', noteData);
     }
 });
 
-// Function to fill the update note window
 function noteViewTextContainer(viewNoteBlock, objectData) {
-    // Add a container for the note text
     const textContainer = document.createElement('div');
     textContainer.classList.add('text-container');
 
@@ -38,7 +32,6 @@ function noteViewTextContainer(viewNoteBlock, objectData) {
     paragraph.textContent = objectData.text;
     paragraph.contentEditable = false;
 
-    // Add doneToggleElement to textContainer
     textContainer.appendChild(paragraph);
 
     viewNoteBlock.appendChild(textContainer);
@@ -46,63 +39,26 @@ function noteViewTextContainer(viewNoteBlock, objectData) {
 
 function deactivateModalNote(){
     const modal = document.getElementById("viewNote");
-    const viewNoteBlock = document.getElementById('viewNoteBlock');
     modal.classList.remove("active");
-    viewNoteBlock.innerHTML = '';
 }
 
 /*  ----------------------------- Requests ----------------------------- */
-
-// Function to request the list of user notes titles
-function getTitlesOfNotes() {
-    fetch('https://localhost:7131/api/Notes/GetTitlesOfNotArchivedNotes', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(response.message + `HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.notesList != null) {
-                displayObjects(data.notesList, 'note');
-            } else {
-                console.log("No notes available");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-// Function to request the user note by id
 async function getNoteData(id) {
     try {
-        const response = await fetch(`https://localhost:7131/api/Notes/GetNoteById?id=${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-            }
+        const response = await $.ajax({
+            url: `https://localhost:7232/Concentration/GetNoteById?id=${id}`,
+            type: 'GET',
+            contentType: 'application/json'
         });
 
-        if (!response.ok) {
-            throw new Error(response.message + `HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (data.note != null) {
-            return data.note;
+        if (response.note != null) {
+            return response.note;
         } else {
-            console.log("No notes available");
+            console.log(response.message);
+            throw new Error(response.message);
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error! ', error);
+        alert('Error!', error);
     }
 }

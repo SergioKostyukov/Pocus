@@ -88,6 +88,14 @@ internal class PlanService(ILogger<PlanService> logger,
 
         return _mapper.Map<PlanDto>(userHabits);
     }
+    public async Task<PlanViewDto> GetHabitsView(string userId)
+    {
+        var userHabits = await _dbContext.Plans
+            .Where(x => x.UserId == userId && x.Title == "Habits")
+            .FirstOrDefaultAsync();
+
+        return _mapper.Map<PlanViewDto>(userHabits);
+    }
     public async Task<PlanViewDto> GetById(int planId)
     {
         var plan = await _dbContext.Plans
@@ -120,7 +128,8 @@ internal class PlanService(ILogger<PlanService> logger,
     {
         var userPlans = await _dbContext.Plans
             .Where(x => x.UserId == userId &&
-                        !x.IsArchived)
+                        !x.IsArchived &&
+                        x.Title != "Habits")
             .ToListAsync();
 
         return _mapper.Map<List<ObjectTitleDto>>(userPlans);

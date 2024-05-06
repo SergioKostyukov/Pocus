@@ -1,4 +1,5 @@
 ﻿@using Pocus.Application.Dto
+@using Pocus.WebUI.Dto
 @using Newtonsoft.Json
 @using System.Collections.Generic
 
@@ -86,7 +87,7 @@
         var textContainer = new System.Text.StringBuilder();
         textContainer.Append("<div class='text-container'>");
 
-        var objectContentArray = JsonConvert.DeserializeObject<List<PlanText>>(text);
+        var objectContentArray = JsonConvert.DeserializeObject<List<PlanToggleDto>>(text);
 
         foreach (var objectContent in objectContentArray)
         {

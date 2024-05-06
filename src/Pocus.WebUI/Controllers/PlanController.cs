@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pocus.Application.Dto;
 using Pocus.Application.Interfaces;
+using Pocus.WebUI.Dto;
 using Pocus.WebUI.Models;
 using System.Security.Claims;
 
@@ -41,20 +42,6 @@ namespace Pocus.WebUI.Controllers
             return View("~/Views/Plan/Plans.cshtml", model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPlanById([FromQuery] int id)
-        {
-            PlanViewDto task = await _planService.GetById(id);
-            if (task != null)
-            {
-                return Ok(new { message = "Plan data get successful", task = task });
-            }
-            else
-            {
-                return Ok(new { message = "There are no such Plan" });
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddPlan([FromBody] NoteAddDto plan)
         {
@@ -75,7 +62,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CopyPlan([FromBody] ObjectRequest request)
+        public async Task<IActionResult> CopyPlan([FromBody] IdRequestDto request)
         {
             try
             {
@@ -105,7 +92,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdatePlanPin([FromBody] ObjectRequest request)
+        public async Task<IActionResult> UpdatePlanPin([FromBody] IdRequestDto request)
         {
             try
             {
@@ -120,7 +107,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> ArchivePlan([FromBody] ObjectRequest request)
+        public async Task<IActionResult> ArchivePlan([FromBody] IdRequestDto request)
         {
             try
             {
@@ -135,7 +122,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeletePlan([FromBody] ObjectRequest request)
+        public async Task<IActionResult> DeletePlan([FromBody] IdRequestDto request)
         {
             try
             {
