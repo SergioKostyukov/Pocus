@@ -1,20 +1,33 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Pocus.Application.Interfaces;
+using Pocus.WebUI.Models;
 using System.Security.Claims;
 
 namespace Pocus.WebUI.Controllers
 {
     [Authorize]
-    public class ArchiveController(ILogger<ArchiveController> logger,
-                                IHttpContextAccessor httpContextAccessor) : Controller
+    public class ArchiveController(IHttpContextAccessor httpContextAccessor,
+                                   IPlanService planService,
+                                   INoteService noteService) : Controller
     {
-        private readonly ILogger<ArchiveController> _logger = logger;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly IPlanService _planService = planService;
+        private readonly INoteService _noteService = noteService;
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return View("~/Views/Archive/Archive.cshtml");
+            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? throw new InvalidOperationException("User not found");
+
+            var model = new ArchiveModel
+            {
+                PlansList = await _planService.GetArchived(userId),
+                NotesList = await _noteService.GetArchived(userId)
+            };
+
+            return View("~/Views/Archive/Archive.cshtml", model);
         }
     }
 }

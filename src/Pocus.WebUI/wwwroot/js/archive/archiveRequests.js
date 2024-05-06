@@ -1,137 +1,76 @@
-// ------------------------- Sending Requests -------------------------
-
-// Function to send a request to unarchive a task
-async function unArchiveTask(TaskId) {
+async function unArchivePlan(PlanId) {
     var requestData = {
-        id: TaskId,
-        status: false
+        Id: PlanId,
     };
 
-    try {
-        await serverRequest('Tasks/ArchiveTask', 'PATCH', requestData);
-    } catch (error) {
-        console.error('Error unarchiving task:', error);
+    var requestParams = {
+        Path: 'Plan/ArchivePlan',
+        Type: 'PATCH',
+        RequestObject: requestData,
+        ErrorMessage: 'Unarchiving plan'
     }
 
-    getArchivedTasks();
+    await serverRequest(requestParams);
 }
 
-// Function to send a request to unarchive a note
-async function unArchiveNote(TaskId) {
+async function unArchiveNote(NoteId) {
     var requestData = {
-        id: TaskId,
-        status: false
+        Id: NoteId
     };
 
-    try {
-        await serverRequest('Notes/ArchiveNote', 'PATCH', requestData);
-    } catch (error) {
-        console.error('Error unarchiving note:', error);
+    var requestParams = {
+        Path: 'Note/ArchiveNote',
+        Type: 'PATCH',
+        RequestObject: requestData,
+        ErrorMessage: 'Unarchiving note'
     }
 
-    getArchivedNotes();
+    await serverRequest(requestParams);
 }
 
-// Function to send a request to delete a task
-async function deleteTask(TaskId) {
+async function deletePlan(PlanId) {
     var requestData = {
-        id: TaskId
+        Id: PlanId
     };
 
-    try {
-        await serverRequest('Tasks/DeleteTask', 'DELETE', requestData);
-    } catch (error) {
-        console.error('Error deleting task:', error);
+    var requestParams = {
+        Path: 'Plan/DeletePlan',
+        Type: 'DELETE',
+        RequestObject: requestData,
+        ErrorMessage: 'Deleting plan'
     }
 
-    getArchivedTasks();
+    await serverRequest(requestParams);
 }
 
-// Function to send a request to delete a note
-async function deleteNote(TaskId) {
+async function deleteNote(NoteId) {
     var requestData = {
-        id: TaskId
+        Id: NoteId
     };
 
-    try {
-        await serverRequest('Notes/DeleteNote', 'DELETE', requestData);
-    } catch (error) {
-        console.error('Error deleting note:', error);
+    var requestParams = {
+        Path: 'Note/DeleteNote',
+        Type: 'DELETE',
+        RequestObject: requestData,
+        ErrorMessage: 'Deleting note'
     }
 
-    getArchivedNotes();
+    await serverRequest(requestParams);
 }
 
-/* ----------------------------- Requests ----------------------------- */
-
-// Template function for sending a request (without data on return)
-async function serverRequest(path, type, requestObject) {
-    try {
-        const response = await fetch('https://localhost:7131/api/' + path, {
-            method: type,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-            },
-            body: JSON.stringify(requestObject)
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+async function serverRequest(request) {
+    await $.ajax({
+        url: 'https://localhost:7232/' + request.Path,
+        type: request.Type,
+        contentType: 'application/json',
+        data: JSON.stringify(request.RequestObject),
+        success: function (data) {
+            console.log(data.message);
+            window.location.href = '/Archive/Get';
+        },
+        error: function (error) {
+            console.error(`Error! ${request.ErrorMessage}:`, error);
+            alert(`Error! ${request.ErrorMessage}:`, error);
         }
-
-        const data = await response.json();
-        console.log(data.message);
-    } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        throw error;
-    }
-}
-
-// Function to send a request to get the list of archived tasks for the user
-async function getArchivedTasks() {
-    // Your API request to get the list of tasks
-    fetch('https://localhost:7131/api/Tasks/GetArchivedTasks', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(response.message + `HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            displayTasks(data.tasksList);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-// Function to send a request to get the list of archived notes for the user
-async function getArchivedNotes() {
-    // Your API request to get the list of notes
-    fetch('https://localhost:7131/api/Notes/GetArchivedNotes', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getCookieValue("jwtToken"),
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(response.message + `HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            displayNotes(data.notesList);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    });
 }

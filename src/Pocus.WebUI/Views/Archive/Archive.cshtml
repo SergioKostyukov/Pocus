@@ -1,25 +1,91 @@
-﻿@section Style {
+﻿@using Newtonsoft.Json
+
+@model ArchiveModel
+
+@section Style {
     <link rel="stylesheet" href="~/css/tasks/tasks.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/tasks/buttons.css" asp-append-version="true">
 
-    <link rel="stylesheet" href="css/archive.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/archive.css" asp-append-version="true">
 }
 
 <div class="center-blocks">
-    <div class="half-page" id="tasksArchive">
-        <h1>
-            Archived Tasks
-        </h1>
+    <div class="half-page">
+        <h1>Archived Plans</h1>
+        @if (Model.PlansList.Count() == 0)
+        {
+            <p>There are no plans yet</p>
+        }
+        else
+        {
+            @foreach (var plan in Model.PlansList)
+            {
+                <div class="task-block" id="block@(plan.Id)">
+                    <h3>@plan.Title</h3>
+
+                    <button class="action-button archive-button" onclick="unArchivePlan(@(plan.Id))" title="Unarchive">
+                        <img src="~/images/folder.png" alt="archive" />
+                    </button>
+
+                    <button class="action-button delete-button" onclick="deletePlan(@(plan.Id))" title="Delete">
+                        <img src="~/images/delete.png" alt="delete" />
+                    </button>
+
+                    <hr />
+
+                    <div class="text-container">
+                        @if (plan.Text != null)
+                        {
+                            var planContentArray = JsonConvert.DeserializeObject<List<PlanText>>(plan.Text);
+                            foreach (var planContent in planContentArray)
+                            {
+                                <div class="done-toggle">
+                                    <input type="checkbox" checked="@planContent.IsDone" disabled />
+                                    <p>@planContent.Text</p>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        }
     </div>
 
-    <div class="half-page" id="notesArchive">
-        <h1>
-            Archived Notes
-        </h1>
+    <div class="half-page">
+        <h1>Archived Notes</h1>
+        @if (Model.NotesList.Count() == 0)
+        {
+            <p>There are no notes yet</p>
+        }
+        else
+        {
+            @foreach (var note in Model.NotesList)
+            {
+                <div class="task-block" id="block@(note.Id)">
+                    <h3>@note.Title</h3>
+
+                    <button class="action-button archive-button" onclick="unArchiveNote(@(note.Id))" title="Unarchive">
+                        <img src="~/images/folder.png" alt="archive" />
+                    </button>
+
+                    <button class="action-button delete-button" onclick="deleteNote(@(note.Id))" title="Delete">
+                        <img src="~/images/delete.png" alt="delete" />
+                    </button>
+
+                    <hr />
+
+                    <div class="text-container">
+                        @if (note.Text != null)
+                        {
+                            <p>@note.Text</p>
+                        }
+                    </div>
+                </div>
+            }
+        }
     </div>
 </div>
 
 @section Scripts {
     <script src="~/js/archive/archiveRequests.js" asp-append-version="true"></script>
-    <script src="~/js/archive/archive.js" asp-append-version="true"></script>
 }
