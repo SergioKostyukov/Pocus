@@ -13,15 +13,13 @@ const COLOR_CODES = {
     }
 };
 
-// Variables to manage the timer
 let timeLimit = 0;
 let timePassed = 0;
 let timeLeft = 0;
 let timerInterval = null;
 let remainingPathColor = COLOR_CODES.info.color;
-let timerStoped = false; // Flag to track if the timer is stopped
+let timerStoped = false;
 
-// Function to initialize timer UI
 function InitializeTimerUI() {
     document.getElementById("timer").innerHTML = `
         <div class="base-timer">
@@ -46,13 +44,17 @@ function InitializeTimerUI() {
         <p id="nextStage">Next: Break</p>`;
 }
 
-// Function to control the timer flow based on session and local storage values
 async function TimerController() {
     const timerValue = parseInt(sessionStorage.getItem("timerValue"));
     const disableBreaks = sessionStorage.getItem("disableBreaks") === "true";
     const doneValue = parseInt(sessionStorage.getItem("doneValue")) || 0;
-    const workTime = parseInt(localStorage.getItem("work_time"));
-    const breakTime = parseInt(localStorage.getItem("break_time"));
+    const workTime = parseInt(settingsData.WorkTime);
+    const breakTime = parseInt(settingsData.BreakTime);
+
+    console.log("timer value: " + timerValue);
+    console.log("done value: " + doneValue);
+    console.log("workTime: " + workTime);
+    console.log("breakTime: " + breakTime);
 
     if (!disableBreaks) {
         timeLeft = timerValue - doneValue;
@@ -87,28 +89,6 @@ async function TimerController() {
     ExitTimer();
 }
 
-// Function to update the text indicating the next stage of the timer
-function UpdateNextStage(stageValue, stage) {
-    const workTime = parseInt(localStorage.getItem("work_time"));
-    const breakTime = parseInt(localStorage.getItem("break_time"));
-
-    const leftTime = parseInt(sessionStorage.getItem("timerValue")) - parseInt(sessionStorage.getItem("doneValue"));
-
-    let nextStageText;
-    if (sessionStorage.getItem("disableBreaks") === "true") {
-        nextStageText = "";
-    } else if (leftTime - stageValue === 0) {
-        nextStageText = "The last one";
-    } else if (stage === "Work") {
-        nextStageText = `Next: ${leftTime - stageValue <= breakTime ? leftTime - stageValue + " min. break" : breakTime + " min. break"}`;
-    } else {
-        nextStageText = `Next: ${leftTime - stageValue <= workTime ? leftTime - stageValue + " min. work" : workTime + " min. work"}`;
-    }
-
-    document.getElementById("nextStage").innerText = nextStageText;
-}
-
-// Function to start the timer for a given duration and stage type
 async function StartTimer(timerValue, stageType) {
     COLOR_CODES.warning.threshold = timerValue * 60 * 0.25;
     COLOR_CODES.alert.threshold = timerValue * 60 * 0.1;
@@ -116,7 +96,7 @@ async function StartTimer(timerValue, stageType) {
     UpdateNextStage(timerValue, stageType);
     sessionStorage.setItem("stageType", stageType);
 
-    document.getElementById("pauseButton").src = "images/pause.png";
+    document.getElementById("pauseButton").src = "/images/pause.png";
 
     timeLimit = timerValue * 60;
     timePassed = parseInt(sessionStorage.getItem("timerStatus") || 0);
@@ -140,18 +120,36 @@ async function StartTimer(timerValue, stageType) {
     });
 }
 
-// Function called when the timer reaches zero
+function UpdateNextStage(stageValue, stage) {
+    const workTime = parseInt(settingsData.WorkTime);
+    const breakTime = parseInt(settingsData.BreakTime);
+
+    const leftTime = parseInt(sessionStorage.getItem("timerValue")) - parseInt(sessionStorage.getItem("doneValue"));
+
+    let nextStageText;
+    if (sessionStorage.getItem("disableBreaks") === "true") {
+        nextStageText = "";
+    } else if (leftTime - stageValue === 0) {
+        nextStageText = "The last one";
+    } else if (stage === "Work") {
+        nextStageText = `Next: ${leftTime - stageValue <= breakTime ? leftTime - stageValue + " min. break" : breakTime + " min. break"}`;
+    } else {
+        nextStageText = `Next: ${leftTime - stageValue <= workTime ? leftTime - stageValue + " min. work" : workTime + " min. work"}`;
+    }
+
+    document.getElementById("nextStage").innerText = nextStageText;
+}
+
 function OnTimesUp() {
     sessionStorage.setItem("doneValue", parseInt(sessionStorage.getItem("doneValue")) + timeLimit / 60);
 
     clearInterval(timerInterval);
     timerInterval = null;
-    document.getElementById("pauseButton").src = "images/start.png";
+    document.getElementById("pauseButton").src = "/images/start.png";
 
     UpdateCompleteTime();
 }
 
-// Function to set the remaining path color of the timer based on time left
 function SetRemainingPathColor(timeLeft) {
     const { alert, warning, info } = COLOR_CODES;
     const remainingPath = document.getElementById("base-timer-path-remaining");
@@ -171,12 +169,6 @@ function SetRemainingPathColor(timeLeft) {
     }
 }
 
-// Function to calculate the time fraction elapsed for the timer
-function CalculateTimeFraction() {
-    const rawTimeFraction = timeLeft / timeLimit;
-    return rawTimeFraction - (1 / timeLimit) * (1 - rawTimeFraction);
-}
-
 // Function to set the dash array of the timer circle based on elapsed time
 function SetCircleDasharray() {
     const circleDasharray = `${(CalculateTimeFraction() * FULL_DASH_ARRAY).toFixed(0)} 283`;
@@ -185,15 +177,18 @@ function SetCircleDasharray() {
         .setAttribute("stroke-dasharray", circleDasharray);
 }
 
-// Function to pause or resume the timer
+function CalculateTimeFraction() {
+    const rawTimeFraction = timeLeft / timeLimit;
+    return rawTimeFraction - (1 / timeLimit) * (1 - rawTimeFraction);
+}
+
 function PauseResumeTimer() {
     document.getElementById("pauseButton").src =
-        timerStoped ? "images/pause.png" : "images/start.png";
+        timerStoped ? "/images/pause.png" : "/images/start.png";
 
     timerStoped = !timerStoped;
 }
 
-// Function to reset the timer
 function ResetTimer() {
     clearInterval(timerInterval);
     timerInterval = null;
@@ -205,7 +200,6 @@ function ResetTimer() {
     TimerController();
 }
 
-// Function to exit the timer mode
 function ExitTimer() {
     clearInterval(timerInterval);
     timerInterval = null;
@@ -217,8 +211,12 @@ function ExitTimer() {
     // update progress value
     UpdateCompleteTime();
     SaveBlocksData();
-    updateGoalBlock();
 
-    document.getElementById("overlay").style.display = "none";
-    sessionStorage.setItem("overlayActive", "false");
+    window.location.href = "Get";
+}
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
 }

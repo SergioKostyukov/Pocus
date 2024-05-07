@@ -108,7 +108,7 @@ function setHabits() {
         if (localStorage.getItem('selected_habits')) {
             localStorage.removeItem('selected_habits');
         } else {
-            localStorage.setItem('selected_habits', 1);
+            localStorage.setItem('selected_habits', HabitsId);
         }
 
         setObjectSelectBlock('habits');

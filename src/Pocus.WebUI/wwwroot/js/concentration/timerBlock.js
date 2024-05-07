@@ -35,12 +35,12 @@ function updateTimerDisplay() {
     timerDisplay.innerText = formatTime(timerValue);
     sessionStorage.setItem('timerValue', timerValue);
     updateBreaksNumber();
+}
 
-    function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-    }
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
 }
 
 function updateBreaksNumber(disableBreaks) {

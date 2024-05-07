@@ -1,0 +1,137 @@
+.background {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+    align-items: center;
+    justify-content: center;
+}
+
+    .background .session-block {
+        height: 70%;
+        width: 60%;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        gap: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+.half-block {
+    height: 100%;
+    width: calc(50% - 10px);
+    gap: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+    .half-block .timer-block {
+        height: 85%;
+        width: 100%;
+        background-color: #bbb;
+        border: none;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+        .half-block .timer-block p {
+            display: flex;
+            justify-content: center;
+        }
+
+    .half-block .buttons-block {
+        height: 15%;
+        width: 100%;
+        gap: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .half-block .buttons-block .session-button {
+            height: 70px;
+            width: 70px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #999;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+        }
+
+            .half-block .buttons-block .session-button img {
+                max-width: 100%;
+                max-height: 100%;
+                pointer-events: none;
+            }
+
+h3 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+}
+
+.content-block {
+    width: 100%;
+    background-color: #bbb;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+}
+
+.first-mode {
+    height: 100%;
+}
+
+.second-mode {
+    height: 50%;
+}
+
+.third-mode {
+    height: 33%;
+}
+
+.text-container {
+    width: 95%;
+    margin-top: 0px;
+    overflow-y: auto;
+}
+
+    .text-container .done-toggle {
+        display: flex;
+        margin-bottom: 5px;
+    }
+
+        .text-container .done-toggle input {
+            width: 15px;
+            height: 15px;
+            margin: 5px 10px 0 0;
+        }
+
+    .text-container p {
+        font-size: 18px;
+        margin: 3px 0 0 0;
+        outline: none;
+    }
+
+    .text-container .done-toggle p {
+        width: calc(100% - 25px);
+    }
+
+        .text-container .done-toggle p.line-through {
+            text-decoration: line-through;
+            color: #999;
+        }

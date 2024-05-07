@@ -150,6 +150,37 @@
 @section Scripts {
     <script>
         var settingsData = @Html.Raw(JsonConvert.SerializeObject(Model.Settings));
+        var HabitsId = @Html.Raw(JsonConvert.SerializeObject(Model.Habits.Id));
+    </script>
+
+    <script>
+        document.getElementById("startTimerButton").addEventListener("click", function () {
+            if (!localStorage.getItem("selected_task")) {
+                alert("You have to choose a task!");
+                return;
+            }
+
+            if (sessionStorage.getItem("timerValue") == 0) {
+                alert("You have to choose a time!");
+                return;
+            }
+
+            sessionStorage.setItem("stageType", "Work");
+            //sessionStorage.setItem("timerValue", "Work");
+            //sessionStorage.setItem("disableBreaks", "Work");
+            //sessionStorage.setItem("doneValue", "Work");
+
+            var selectedTask = localStorage.getItem("selected_task");
+            var selectedNote = localStorage.getItem("selected_note");
+            var selectedHabits = localStorage.getItem("selected_habits");
+
+            var url = "@Url.Action("GetSessionActive", "Concentration")";
+            url += "?plan=" + (selectedTask ? encodeURIComponent(selectedTask) : "");
+            url += "&note=" + (selectedNote ? encodeURIComponent(selectedNote) : "");
+            url += "&habits=" + (selectedHabits ? encodeURIComponent(selectedHabits) : "");
+
+            window.location.href = url;
+        });
     </script>
 
     <script src="~/js/concentration/selectBlock/common.js" asp-append-version="true"></script>

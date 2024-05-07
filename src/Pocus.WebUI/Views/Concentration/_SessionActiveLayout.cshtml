@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="~/images/favicon.png" type="image/png">
+    <title>Pocus</title>
+
+    <link rel="stylesheet" href="~/css/shared/base.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/shared/block.css" asp-append-version="true">
+
+    @await RenderSectionAsync("Style", required: false)
+</head>
+
+<body>
+    <main class="background">
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

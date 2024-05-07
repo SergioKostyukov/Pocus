@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Pocus.Application.Dto;
 using Pocus.Application.Interfaces;
 using Pocus.WebUI.Models;
@@ -38,9 +39,20 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSessionActive()
+        public async Task<IActionResult> GetSessionActive(string plan, string? note, string? habits)
         {
-            return View("~/Views/Concentration/SessionActive.cshtml");
+            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? throw new InvalidOperationException("User not found");
+
+            var model = new SessionActiveModel
+            {
+                Plan = await _planService.GetById(int.Parse(plan)),
+                Note = string.IsNullOrEmpty(note) ? null : await _noteService.GetById(int.Parse(note)),
+                Habits = string.IsNullOrEmpty(habits) ? null : await _planService.GetHabitsView(userId),
+                Settings = await _settingService.GetByUserId(userId)
+            };
+
+            return View("~/Views/Concentration/SessionActive.cshtml", model);
         }
 
         [HttpGet]
@@ -57,7 +69,6 @@ namespace Pocus.WebUI.Controllers
             }
         }
 
-
         [HttpGet]
         public async Task<IActionResult> GetNoteById([FromQuery] int id)
         {
@@ -72,20 +83,34 @@ namespace Pocus.WebUI.Controllers
             }
         }
 
+        [HttpPatch]
+        public async Task<IActionResult> UpdatePlanText([FromBody] ObjectUpdateTextDto request)
+        {
+            try
+            {
+                await _planService.UpdateText(request);
 
-        //[HttpPatch]
-        //public async Task<IActionResult> UpdatePlanText([FromBody] ObjectUpdateTextDto request)
-        //{
-        //    try
-        //    {
-        //        await _planService.UpdateText(request);
+                return Ok(new { message = "Plan text update successfully" });
+            }
+            catch
+            {
+                return BadRequest(new { message = "Plan text update failed" });
+            }
+        }
 
-        //        return Ok(new { message = "Plan test update successfully" });
-        //    }
-        //    catch
-        //    {
-        //        return BadRequest(new { message = "Plan test update failed" });
-        //    }
-        //}
+        [HttpPatch]
+        public async Task<IActionResult> UpdateNoteText([FromBody] ObjectUpdateTextDto request)
+        {
+            try
+            {
+                await _noteService.UpdateText(request);
+
+                return Ok(new { message = "Note text update successfully" });
+            }
+            catch
+            {
+                return BadRequest(new { message = "Note text update failed" });
+            }
+        }
     }
 }

@@ -1,35 +1,158 @@
-﻿@section Style {
-    <link rel="stylesheet" href="~/css/concentration/timerActive.css" asp-append-version="true">
+﻿@model SessionActiveModel
+
+@using Newtonsoft.Json
+@using Pocus.Application.Dto
+@using Pocus.WebUI.Dto
+
+@{
+    Layout = "~/Views/Concentration/_SessionActiveLayout.cshtml";
 }
 
-<div class="overlay" id="overlay">
-    <div class="modal" id="sessionModeContent">
-        <div class="half-block" id="timerBlock">
-            <div class="timer-block">
-                <div id="timer" class="clock">
-                </div>
-            </div>
-            <div class="buttons-block">
-                <button class="session-button" id="pauseTimerButton">
-                    <img src="~/images/pause.png" id="pauseButton" alt="Pause">
-                </button>
-                <button class="session-button" id="resetTimerButton">
-                    <img src="~/images/reset_timer.png" alt="Reset">
-                </button>
-                <button class="session-button" id="exitTimerButton">
-                    <img src="~/images/exit.png" alt="Exit">
-                </button>
+@section Style {
+    <link rel="stylesheet" href="~/css/sessionActive/timerActive.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/sessionActive/timer.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/concentration/scrollbar.css" asp-append-version="true">
+}
+<div class="session-block">
+    <div class="half-block">
+        <div class="timer-block">
+            <div id="timer" class="clock">
             </div>
         </div>
+        <div class="buttons-block">
+            <button class="session-button" onclick="PauseResumeTimer()">
+                <img src="~/images/pause.png" id="pauseButton" alt="Pause">
+            </button>
+            <button class="session-button" onclick="ResetTimer()">
+                <img src="~/images/reset_timer.png" alt="Reset">
+            </button>
+            <button class="session-button" onclick="ExitTimer()">
+                <img src="~/images/exit.png" alt="Exit">
+            </button>
+        </div>
+    </div>
 
-        <div class="half-block" id="contentBlock">
-        </div>
+    <div class="half-block" id="contentBlock">
+        @Html.Raw(FillContentBlocks())
     </div>
 </div>
 
+@functions {
+    string FillContentBlocks()
+    {
+        var (modeInt, active) = ContentType();
+        string mode = GetBlockType(modeInt);
+
+        var textContainer = new System.Text.StringBuilder();
+
+        textContainer.Append(FillPlanBlock(mode, Model.Plan));
+        if (modeInt == 2)
+        {
+            if (active == "Note") textContainer.Append(FillNoteBlock(mode));
+            else textContainer.Append(FillPlanBlock(mode, Model.Habits, "Habits"));
+        }
+        else if (modeInt == 3)
+        {
+            textContainer.Append(FillNoteBlock(mode));
+            textContainer.Append(FillPlanBlock(mode, Model.Habits, "Habits"));
+        }
+
+        return textContainer.ToString();
+    }
+
+    string FillPlanBlock(string mode, PlanViewDto data, string type = "Plan")
+    {
+        var textContainer = new System.Text.StringBuilder();
+
+        textContainer.Append($"<div class='content-block {mode}-mode' id='{data.Id}'>");
+
+        textContainer.Append($"<h3>{data.Title}</h3>");
+        textContainer.Append($"<div class='text-container' id='{type}'>");
+
+        textContainer.Append(FillPlanText(data.Text));
+
+        textContainer.Append("</div>");
+
+        textContainer.Append("</div>");
+
+        return textContainer.ToString();
+    }
+
+    string FillNoteBlock(string mode)
+    {
+        var textContainer = new System.Text.StringBuilder();
+
+        textContainer.Append($"<div class='content-block {mode}-mode' id='{Model.Note.Id}'>");
+
+        textContainer.Append($"<h3>{Model.Note.Title}</h3>");
+        textContainer.Append($"<div class='text-container' id='Note'>");
+
+        textContainer.Append($"<p contenteditable='true'>{Model.Note.Text}</p>");
+
+        textContainer.Append("</div>");
+
+        textContainer.Append("</div>");
+
+        return textContainer.ToString();
+    }
+
+    string FillPlanText(string text)
+    {
+        var textContainer = new System.Text.StringBuilder();
+
+        var objectContentArray = JsonConvert.DeserializeObject<List<PlanToggleDto>>(text);
+
+        foreach (var objectContent in objectContentArray)
+        {
+            textContainer.Append("<div class='done-toggle'>");
+            textContainer.Append($"<input type='checkbox' id='breakToggle' {(objectContent.IsDone ? "checked" : "")}>");
+            textContainer.Append($"<p contenteditable='true' {(objectContent.IsDone ? "class='line-through'" : "")}>{objectContent.Text}</p>");
+            textContainer.Append("</div>");
+        }
+
+        return textContainer.ToString();
+    }
+
+    string GetBlockType(int num)
+    {
+        if (num == 1) return "first";
+        else if (num == 2) return "second";
+        else return "third";
+    }
+
+    (int, string) ContentType()
+    {
+        int mode;
+        string active = "";
+        if (Model.Note is null && Model.Habits is null)
+        {
+            mode = 1;
+        }
+        else if (Model.Note is null)
+        {
+            mode = 2;
+            active = "Habits";
+        }
+        else if (Model.Habits is null)
+        {
+            mode = 2;
+            active = "Note";
+        }
+        else
+        {
+            mode = 3;
+        }
+
+        return (mode, active);
+    }
+}
+
 @section Scripts {
-    <script src="~/js/concentration/sessionActive/overlayController.js" asp-append-version="true"></script>
-    <script src="~/js/concentration/sessionActive/contentBlocks.js" asp-append-version="true"></script>
-    <script src="~/js/concentration/sessionActive/timerActive.js" asp-append-version="true"></script>
-    <script src="~/js/concentration/sessionActive/updateRequests.js" asp-append-version="true"></script>
+    <script>
+        var settingsData = @Html.Raw(JsonConvert.SerializeObject(Model.Settings));
+    </script>
+
+    <script src="~/js/sessionActive/timerActive.js" asp-append-version="true"></script>
+    <script src="~/js/sessionActive/updateRequests.js" asp-append-version="true"></script>
+    <script src="~/js/sessionActive/overlayController.js" asp-append-version="true"></script>
 }
