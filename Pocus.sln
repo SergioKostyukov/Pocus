@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pocus.Core", "src\Pocus.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pocus.Application", "src\Pocus.Application\Pocus.Application.csproj", "{311FAD7A-BBEE-4B58-ABB8-B68EE98D6BAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pocus.Infrastructure", "src\Pocus.Infrastructure\Pocus.Infrastructure.csproj", "{21500EA7-FEC6-4308-B028-195F80197AE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{311FAD7A-BBEE-4B58-ABB8-B68EE98D6BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{311FAD7A-BBEE-4B58-ABB8-B68EE98D6BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{311FAD7A-BBEE-4B58-ABB8-B68EE98D6BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21500EA7-FEC6-4308-B028-195F80197AE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21500EA7-FEC6-4308-B028-195F80197AE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21500EA7-FEC6-4308-B028-195F80197AE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21500EA7-FEC6-4308-B028-195F80197AE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{5F3D04EC-82FF-4C8E-8687-369F9374A6BA} = {62FCFF5E-035C-4459-BFFA-84B082B38659}
 		{C6551083-3DD8-4BF2-B681-B00A16426B8E} = {62FCFF5E-035C-4459-BFFA-84B082B38659}
 		{311FAD7A-BBEE-4B58-ABB8-B68EE98D6BAB} = {62FCFF5E-035C-4459-BFFA-84B082B38659}
+		{21500EA7-FEC6-4308-B028-195F80197AE9} = {62FCFF5E-035C-4459-BFFA-84B082B38659}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3ADF76A5-9746-4AB6-8938-DE9B4962BAE9}

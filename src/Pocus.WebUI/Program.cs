@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Pocus.Core.Entities;
-using Pocus.Infrastructure.Data;
 using Pocus.Application;
+using Pocus.Core.Entities;
+using Pocus.Infrastructure;
+using Pocus.Infrastructure.Data;
 
 namespace Pocus;
 
@@ -30,7 +31,8 @@ public class Program
 
         builder.Services.AddServices(builder.Configuration);
         builder.Services.AddBogusServices();
-
+        builder.Services.AddInfrastructure(builder.Configuration);
+         
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
         #endregion

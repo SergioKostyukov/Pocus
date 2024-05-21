@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Pocus.Core\Pocus.Core.csproj" />
     <ProjectReference Include="..\Pocus.Infrastructure.Data\Pocus.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Pocus.Infrastructure\Pocus.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
