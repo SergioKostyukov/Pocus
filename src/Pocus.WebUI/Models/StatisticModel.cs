@@ -2,4 +2,5 @@
 
 public class StatisticModel
 {
+    public int UserId { get; set; }
 }

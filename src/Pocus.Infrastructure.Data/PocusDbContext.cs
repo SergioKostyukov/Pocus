@@ -13,6 +13,7 @@ public class PocusDbContext : IdentityDbContext<User>
     public DbSet<Note> Notes { get; set; }
     public DbSet<Plan> Plans { get; set; }
     public DbSet<Settings> Settings { get; set; }
+    public DbSet<Statistic> Statistic { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

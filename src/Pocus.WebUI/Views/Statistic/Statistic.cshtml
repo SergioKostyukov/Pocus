@@ -1,11 +1,187 @@
-﻿@section Style {
-    @* <link rel="stylesheet" href="~/css/mainPage.css" asp-append-version="true"> *@
+﻿@page
+@model StatisticModel
+
+@section Style {
+    <link rel="stylesheet" href="~/css/statistic.css" asp-append-version="true">
 }
 
-<section class="center-blocks">
+<div class="container">
+    <div class="period-buttons">
+        <button class="active" onclick="selectPeriod('day')">Day</button>
+        <button onclick="selectPeriod('week')">Week</button>
+        <button onclick="selectPeriod('month')">Month</button>
+        <button onclick="selectPeriod('year')">Year</button>
+    </div>
 
-</section>
+    <div class="content">
+        <div class="charts-container">
+            <div class="chart">
+                <canvas id="focusChart"></canvas>
+            </div>
+            <div class="chart">
+                <canvas id="tasksChart"></canvas>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <table id="statisticsTable">
+                <thead>
+                    <tr>
+                        <th>Statistic</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total time</td>
+                        <td id="totalTime"></td>
+                    </tr>
+                    <tr>
+                        <td>Total done plans count</td>
+                        <td id="totalTasks"></td>
+                    </tr>
+                    <tr>
+                        <td>Average work time</td>
+                        <td id="averageTime"></td>
+                    </tr>
+                    <tr>
+                        <td>Average done plans number</td>
+                        <td id="averageTasks"></td>
+                    </tr>
+                    <tr>
+                        <td>Most productive time</td>
+                        <td id="favoriteTime"></td>
+                    </tr>
+                    <tr>
+                        <td>Maximum work time</td>
+                        <td id="peakTime"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const data = [
+            { date: '2024-05-15', tasksCompleted: 5, focusTime: 3600 },
+            { date: '2024-05-16', tasksCompleted: 3, focusTime: 5400 },
+            { date: '2024-05-17', tasksCompleted: 8, focusTime: 7200 },
+            { date: '2024-05-18', tasksCompleted: 2, focusTime: 1800 },
+            { date: '2024-05-19', tasksCompleted: 5, focusTime: 3600 },
+            { date: '2024-05-20', tasksCompleted: 3, focusTime: 5400 },
+            { date: '2024-05-21', tasksCompleted: 8, focusTime: 7200 },
+            { date: '2024-05-22', tasksCompleted: 2, focusTime: 1800 },
+            { date: '2024-05-23', tasksCompleted: 5, focusTime: 3600 },
+            { date: '2024-05-24', tasksCompleted: 3, focusTime: 5400 },
+            { date: '2024-05-25', tasksCompleted: 8, focusTime: 7200 },
+            { date: '2024-05-27', tasksCompleted: 2, focusTime: 1800 }
+        ];
 
+        document.addEventListener('DOMContentLoaded', function () {
+            populateTable(data);
+            createCharts(data);
+        });
+
+        function selectPeriod(period) {
+            document.querySelectorAll('.period-buttons button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector(`button[onclick="selectPeriod('${period}')"]`).classList.add('active');
+            // Фільтрація даних за періодом може бути додана тут
+        }
+
+        function populateTable(data) {
+            const totalTime = data.reduce((sum, stat) => sum + stat.focusTime, 0);
+            const totalTasks = data.reduce((sum, stat) => sum + stat.tasksCompleted, 0);
+            const averageTime = totalTime / data.length;
+            const averageTasks = totalTasks / data.length;
+
+            document.getElementById('totalTime').textContent = (totalTime / 3600).toFixed(2) + ' год.';
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('averageTime').textContent = (averageTime / 3600).toFixed(2) + ' год.';
+            document.getElementById('averageTasks').textContent = averageTasks.toFixed(2);
+            document.getElementById('favoriteTime').textContent = findFavoriteTime(data);
+            document.getElementById('peakTime').textContent = findPeakTime(data);
+        }
+
+        function findFavoriteTime(data) {
+            return '18:00 - 19:00';
+        }
+
+        function findPeakTime(data) {
+            return new Date(Math.max(...data.map(stat => new Date(stat.date)))).toLocaleDateString();
+        }
+
+        function createCharts(data) {
+            const dates = data.map(stat => new Date(stat.date).toLocaleDateString());
+            const tasksCompleted = data.map(stat => stat.tasksCompleted);
+            const focusTime = data.map(stat => (stat.focusTime / 3600).toFixed(2));
+
+            const averageTasksCompleted = tasksCompleted.reduce((sum, val) => sum + val, 0) / tasksCompleted.length;
+            const averageFocusTime = focusTime.reduce((sum, val) => sum + parseFloat(val), 0) / focusTime.length;
+
+            const tasksCtx = document.getElementById('tasksChart').getContext('2d');
+            new Chart(tasksCtx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Done tasks',
+                            data: tasksCompleted,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Average tasks',
+                            data: Array(dates.length).fill(averageTasksCompleted),
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            const focusCtx = document.getElementById('focusChart').getContext('2d');
+            new Chart(focusCtx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Work time (hours)',
+                            data: focusTime,
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Average work time',
+                            data: Array(dates.length).fill(averageFocusTime.toFixed(2)),
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 1,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 }
