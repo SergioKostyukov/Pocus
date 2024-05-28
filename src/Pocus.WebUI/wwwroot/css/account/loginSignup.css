@@ -35,13 +35,23 @@ body {
     margin: 0px;
 }
 
+.form-floating{
+    margin: 15px;
+}
+
 input {
     width: 420px;
     height: 40px;
+    width: 100%;
     padding: 0px 15px;
-    margin-bottom: 15px;
     border-radius: 18px;
     border: 1px solid #333;
+}
+
+.text-danger {
+    width: 100%;
+    margin-left: 15px;
+    color: rgb(213, 23, 23);
 }
 
 button {

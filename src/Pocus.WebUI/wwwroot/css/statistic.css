@@ -5,6 +5,28 @@
     align-items: center;
 }
 
+.navigation-intervals {
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+}
+
+.interval-button {
+    height: 40px;
+    width: 100px;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #ddd;
+    border-radius: 10px;
+    margin: 0;
+}
+
+.interval-title {
+    margin: 0;
+    padding: 10px;
+}
+
 .period-buttons {
     display: flex;
     justify-content: center;
@@ -54,6 +76,7 @@
     background-color: #f0f0f0;
     padding: 20px;
     border-radius: 10px;
+    height: 275px;
 }
 
 table {
