@@ -13,8 +13,6 @@ public class Program
     {
         #region Configure services
         var builder = WebApplication.CreateBuilder(args);
-        var connectionString = builder.Configuration.GetConnectionString("PocusDbContextConnection") 
-            ?? throw new InvalidOperationException("Connection string 'PocusDbContextConnection' not found.");
 
         builder.Services.AddStorage(builder.Configuration);
 

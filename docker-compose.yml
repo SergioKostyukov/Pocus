@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  webui:
+    image: webui
+    build:
+      context: .
+      dockerfile: src/Pocus.WebUI/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - mssql
+    environment:
+      - ConnectionStrings__DefaultConnectionString=Data Source=DESKTOP-22P6K89\\SQLEXPRESS;Initial Catalog=PocusDb;Integrated Security=True;TrustServerCertificate=True;
+    volumes:
+      - keys:/keys
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - dbdata:/var/opt/mssql
+
+volumes:
+  dbdata:
+  keys:

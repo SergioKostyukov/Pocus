@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pocus.Application.Dto;
 using Pocus.Application.Interfaces;
 using Pocus.WebUI.Dto;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 
 namespace Pocus.WebUI.Controllers
 {
+    [Authorize]
     public class NoteController(ILogger<NoteController> logger,
                                 IHttpContextAccessor httpContextAccessor,
                                 INoteService noteService) : Controller

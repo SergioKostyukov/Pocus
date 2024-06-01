@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 
 namespace Pocus.Infrastructure.Data;
 
@@ -8,7 +8,7 @@ public static class RegistrationExtensions
 {
 	public static void AddStorage(this IServiceCollection serviceCollection, IConfiguration configuration)
 	{
-		serviceCollection.AddDbContext<PocusDbContext>(options =>
+        serviceCollection.AddDbContext<PocusDbContext>(options =>
 		{
 			options.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"],
 				options => options.MigrationsAssembly(typeof(PocusDbContext).Assembly.FullName));

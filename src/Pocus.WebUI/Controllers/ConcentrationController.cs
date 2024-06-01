@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Pocus.Application.Dto;
 using Pocus.Application.Interfaces;
 using Pocus.WebUI.Models;

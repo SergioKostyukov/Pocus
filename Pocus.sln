@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{C4C8DC5C-618B-420E-BD45-1E251F2E45D4}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		docker-compose.yml = docker-compose.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -21,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pocus.Core", "src\Pocus.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pocus.Application", "src\Pocus.Application\Pocus.Application.csproj", "{311FAD7A-BBEE-4B58-ABB8-B68EE98D6BAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pocus.Infrastructure", "src\Pocus.Infrastructure\Pocus.Infrastructure.csproj", "{21500EA7-FEC6-4308-B028-195F80197AE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pocus.Infrastructure", "src\Pocus.Infrastructure\Pocus.Infrastructure.csproj", "{21500EA7-FEC6-4308-B028-195F80197AE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
