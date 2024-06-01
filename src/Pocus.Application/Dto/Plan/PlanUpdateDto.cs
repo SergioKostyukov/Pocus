@@ -6,4 +6,5 @@ public class PlanUpdateDto
     public string Title { get; set; } = string.Empty;
     public string Text { get; set; } = string.Empty;
     public bool IsPinned { get; set; }
+    public DateTime? NotificationTime { get; set; }
 }

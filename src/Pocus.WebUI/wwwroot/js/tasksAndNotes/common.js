@@ -26,7 +26,7 @@ function saveTogglePin(pinID) {
 function saveUpdate(blockName) {
     const modal = document.getElementById(blockName);
 
-    if(updateData(blockName)){
+    if (updateData(blockName)) {
         modal.classList.remove("active");
     }
 }
@@ -37,7 +37,7 @@ function saveUpdate(blockName) {
 function fillUpdateModal(updateObjectBlock, objectBlock) {
     // Clear the content of the update modal window before updating
     updateObjectBlock.innerHTML = '';
-    
+
     // Add the object title
     // Get data about the object from the selected block
     const objTitle = document.createElement('h3');
@@ -46,10 +46,10 @@ function fillUpdateModal(updateObjectBlock, objectBlock) {
     const objectId = parseInt(objectBlock.id.replace('block', ''), 10);
     objTitle.id = objectId;
     updateObjectBlock.appendChild(objTitle);
-    
-    if(title != "Habits"){
+
+    if (title != "Habits") {
         objTitle.contentEditable = true;
-    }else{
+    } else {
         objTitle.contentEditable = false;
     }
 
@@ -81,17 +81,36 @@ function fillUpdateModal(updateObjectBlock, objectBlock) {
         addArchiveButton(updateObjectBlock, `archiveNote('updateNote')`)
         addSaveButton(updateObjectBlock, `saveUpdate('updateNote')`)
     } else {
-        if(title != "Habits"){
+        addNotificationBlock(updateObjectBlock);
+        if (title != "Habits") {
             addCopyButton(updateObjectBlock, `copyPlan('updateTask')`)
             addDeleteButton(updateObjectBlock, `deletePlan('updateTask')`)
             addArchiveButton(updateObjectBlock, `archivePlan('updateTask')`)
-            addNotificationButton(updateObjectBlock, 'updatePlan')
-        }else{
-            addNotificationButton(updateObjectBlock, 'updatePlan', "first")
+        } else {
             addResetCheckboxButton(updateObjectBlock, `resetCheckboxValues('updateTask')`);
         }
         addSaveButton(updateObjectBlock, `saveUpdate('updateTask')`)
     }
+}
+
+function addNotificationBlock(updateObjectBlock) {
+    const formGroup = document.createElement('div');
+    formGroup.classList.add('form-group');
+
+    const label = document.createElement('label');
+    label.setAttribute('for', 'taskDate');
+    label.textContent = 'Deadline:';
+
+    const input = document.createElement('input');
+    input.type = 'date';
+    input.id = 'taskDate';
+    input.classList.add('form-control');
+    input.style.width = '50%';
+
+    formGroup.appendChild(label);
+    formGroup.appendChild(input);
+
+    updateObjectBlock.appendChild(formGroup);
 }
 
 // Add the "copy" button
@@ -133,24 +152,11 @@ function addDeleteButton(updateObjectBlock, command) {
     updateObjectBlock.appendChild(deleteButton);
 }
 
-// Add the "notification" button
-function addNotificationButton(updateObjectBlock, command, position="fourth") {
-    const notificationButton = document.createElement('button');
-    notificationButton.setAttribute('title', 'Notification');
-    notificationButton.classList.add('action-button', `${position}-button`);
-    const notificationImage = document.createElement('img');
-    notificationImage.src = '/images/notification.png';
-    notificationImage.alt = 'notification';
-    notificationButton.setAttribute('onclick', command);
-    notificationButton.appendChild(notificationImage);
-    updateObjectBlock.appendChild(notificationButton);
-}
-
 // Add the "Reset checkbox" button
 function addResetCheckboxButton(updateObjectBlock, command) {
     const resetButton = document.createElement('button');
     resetButton.setAttribute('title', 'Reset');
-    resetButton.classList.add('action-button', 'second-button');
+    resetButton.classList.add('action-button', 'first-button');
     const resetImage = document.createElement('img');
     resetImage.src = '/images/reset.png';
     resetImage.alt = 'reset';

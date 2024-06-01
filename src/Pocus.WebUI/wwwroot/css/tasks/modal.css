@@ -42,3 +42,20 @@
 .modal .text-container {
     overflow-y: auto;
 }
+
+.form-group {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+    .form-group label {
+        margin-right: 10px;
+    }
+
+    .form-group input {
+        margin-top: 0;
+    }

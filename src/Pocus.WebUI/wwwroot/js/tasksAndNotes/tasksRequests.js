@@ -20,13 +20,14 @@ async function addPlan(blockName) {
 async function updateData(blockName) {
     var planData = GetPlanData(blockName);
 
-    var { Title, Text, IsArchived, IsPinned } = planData;
+    var { Title, Text, IsArchived, IsPinned, NotificationTime } = planData;
     var request = {
         Id: parseInt(document.getElementById(blockName).querySelector('h3').id),
         Title,
         Text,
         IsArchived,
-        IsPinned
+        IsPinned,
+        NotificationTime
     };
 
     var requestParams = {
@@ -90,9 +91,6 @@ async function archivePlan(PlanName) {
     await serverRequest(requestParams);
 }
 
-async function notificationPlan(PlanName) {
-}
-
 async function deletePlan(PlanName) {
     const planBlock = document.getElementById(PlanName);
 
@@ -146,11 +144,15 @@ function GetPlanData(blockName) {
     const pinButton = planBlock.querySelector(".pin-button");
     var isPinned = pinButton.classList.contains("pinned");
 
+    const taskDateElement = planBlock.querySelector("#taskDate");
+    const notificationTime = taskDateElement ? taskDateElement.value : null;
+
     var planData = {
         Title: planTitle,
         Text: JSON.stringify(planContentArray),
         IsArchived: false,
-        IsPinned: isPinned
+        IsPinned: isPinned,
+        NotificationTime: notificationTime
     };
 
     return planData;

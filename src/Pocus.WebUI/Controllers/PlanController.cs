@@ -43,7 +43,7 @@ namespace Pocus.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPlan([FromBody] NoteAddDto plan)
+        public async Task<IActionResult> AddPlan([FromBody] PlanAddDto plan)
         {
             var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                 ?? throw new InvalidOperationException("User not found");

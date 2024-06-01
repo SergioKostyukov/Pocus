@@ -31,7 +31,7 @@ internal class PlanService(ILogger<PlanService> logger,
 
         await _dbContext.SaveChangesAsync();
     }
-    public async Task Create(NoteAddDto request)
+    public async Task Create(PlanAddDto request)
     {
         try
         {
@@ -139,7 +139,6 @@ internal class PlanService(ILogger<PlanService> logger,
         try
         {
             // check if this plan is 'user habits'
-
             var plan = await _dbContext.Plans
                 .Where(x => x.Id == request.Id)
                 .FirstAsync();
@@ -147,6 +146,7 @@ internal class PlanService(ILogger<PlanService> logger,
             plan.Title = request.Title;
             plan.Text = request.Text;
             plan.IsPinned = request.IsPinned;
+            plan.NotificationTime = request.NotificationTime;
 
             _dbContext.Plans.Update(plan);
 
